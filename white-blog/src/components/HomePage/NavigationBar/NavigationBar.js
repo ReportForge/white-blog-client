@@ -11,8 +11,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   logo: {
-    maxHeight: '60px', // Increase logo size
-    marginRight: theme.spacing(2), // Add some space after the logo
+    maxHeight: '45px', // Increase logo size
   },
   title: {
     flexGrow: 1,
@@ -36,6 +35,8 @@ const NavigationBar = () => {
             href="/signin"
             style={{ fontFamily: "'Lato', sans-serif" }}
             sx={{
+             
+              height: "30px",
               borderRadius: '20px', // Adjust for desired roundness
               backgroundColor: '#2C5EE8', // Button color
               color: 'white', // Text color
