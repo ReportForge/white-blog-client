@@ -34,6 +34,7 @@ const NavigationBar = () => {
           <Button
             variant="contained"
             href="/signin"
+            style={{ fontFamily: "'Lato', sans-serif" }}
             sx={{
               borderRadius: '20px', // Adjust for desired roundness
               backgroundColor: '#2C5EE8', // Button color
