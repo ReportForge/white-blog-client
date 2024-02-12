@@ -1,9 +1,8 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import { loginUser } from '../../api/api';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -45,15 +44,23 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const classes = useStyles();
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-        });
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+  
+      try {
+          const credentials = {email, password};
+          const result = await loginUser(credentials);
+          console.log('Sign in successful:', result);
+          // Redirect the user or update UI upon successful sign-in
+      } catch (error) {
+          console.error('Error during sign-in:', error);
+          // Handle errors, e.g., show an error message to the user
+      }
     };
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -85,6 +92,7 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(e) => setEmail(e.target.value)}
             InputLabelProps={{
                 style: { fontFamily: "'Lato', sans-serif" },
             }}
@@ -101,6 +109,7 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(e) => setPassword(e.target.value)}
             InputLabelProps={{
                 style: { fontFamily: "'Lato', sans-serif" },
             }}

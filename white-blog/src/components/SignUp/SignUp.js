@@ -1,19 +1,16 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from '../../assets/images/white_blog_logo.png';
 import { makeStyles } from '@mui/styles';
+import { registerUser } from '../../api/api';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,14 +43,23 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const classes = useStyles();
-    const handleSubmit = (event) => {
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-        });
+        const userData = { firstName, lastName, email, password };
+        try {
+            const result = await registerUser(userData);
+            console.log('Signup successful:', result);
+            // Redirect or update UI upon successful signup
+        } catch (error) {
+            console.error('Error during signup:', error);
+            // Handle errors
+        }
     };
 
     return (
@@ -85,6 +91,7 @@ export default function SignUp() {
                         id="firstName"
                         label="First Name"
                         autoFocus
+                        onChange={(e) => setFirstName(e.target.value)}
                         InputLabelProps={{
                             style: { fontFamily: "'Lato', sans-serif" },
                         }}
@@ -101,6 +108,7 @@ export default function SignUp() {
                         label="Last Name"
                         name="lastName"
                         autoComplete="family-name"
+                        onChange={(e) => setLastName(e.target.value)}
                         InputLabelProps={{
                             style: { fontFamily: "'Lato', sans-serif" },
                         }}
@@ -117,6 +125,7 @@ export default function SignUp() {
                         label="Email Address"
                         name="email"
                         autoComplete="email"
+                        onChange={(e) => setEmail(e.target.value)}
                         InputLabelProps={{
                             style: { fontFamily: "'Lato', sans-serif" },
                         }}
@@ -134,6 +143,7 @@ export default function SignUp() {
                         type="password"
                         id="password"
                         autoComplete="new-password"
+                        onChange={(e) => setPassword(e.target.value)}
                         InputLabelProps={{
                             style: { fontFamily: "'Lato', sans-serif" },
                         }}
