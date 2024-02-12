@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { makeStyles } from '@mui/styles';
 import Logo from '../../../assets/images/white_blog_logo.png';
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,14 @@ const useStyles = makeStyles((theme) => ({
 
 const NavigationBar = () => {
   const classes = useStyles();
+  const isLoggedIn = localStorage.getItem('token') !== null;
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
 
   return (
     <div className={classes.root}>
@@ -30,23 +39,40 @@ const NavigationBar = () => {
           <Typography variant="h6" className={classes.title}>
             <img src={Logo} alt="Logo" className={classes.logo} />
           </Typography>
-          <Button
-            variant="contained"
-            href="/signin"
-            style={{ fontFamily: "'Lato', sans-serif" }}
-            sx={{
-             
-              height: "30px",
-              borderRadius: '20px', // Adjust for desired roundness
-              backgroundColor: '#2C5EE8', // Button color
-              color: 'white', // Text color
-              '&:hover': {
-                backgroundColor: '#204eb7', // Color on hover
-              },
-            }}
-          >
-            Sign In
-          </Button>
+          {!isLoggedIn ?
+            <Button
+              variant="contained"
+              href="/signin"
+              style={{ fontFamily: "'Lato', sans-serif" }}
+              sx={{
+
+                height: "30px",
+                borderRadius: '20px', // Adjust for desired roundness
+                backgroundColor: '#2C5EE8', // Button color
+                color: 'white', // Text color
+                '&:hover': {
+                  backgroundColor: '#204eb7', // Color on hover
+                },
+              }}
+            >
+              Sign In
+            </Button> : <Button
+              variant="contained"
+              style={{ fontFamily: "'Lato', sans-serif" }}
+              onClick={handleLogout}
+              sx={{
+
+                height: "30px",
+                borderRadius: '20px', // Adjust for desired roundness
+                backgroundColor: '#2C5EE8', // Button color
+                color: 'white', // Text color
+                '&:hover': {
+                  backgroundColor: '#204eb7', // Color on hover
+                },
+              }}
+            >
+              Log Out
+            </Button>}
         </Toolbar>
       </AppBar>
     </div>

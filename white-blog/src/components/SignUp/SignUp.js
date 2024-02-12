@@ -11,32 +11,34 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from '../../assets/images/white_blog_logo.png';
 import { makeStyles } from '@mui/styles';
 import { registerUser } from '../../api/api';
+import { useNavigate } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      flexGrow: 1,
+        flexGrow: 1,
     },
     logo: {
-      maxHeight: '70px', // Increase logo size
+        maxHeight: '70px', // Increase logo size
     },
     title: {
-      flexGrow: 1,
-      display: 'flex', // Ensure the logo aligns to the left
-      alignItems: 'center',
+        flexGrow: 1,
+        display: 'flex', // Ensure the logo aligns to the left
+        alignItems: 'center',
     },
-  }));
+}));
 
 function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props} style={{ fontFamily: "'Lato', sans-serif" }}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://www.white-hat.co.il/" style={{ fontFamily: "'Lato', sans-serif" }}>
-      White Hat
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props} style={{ fontFamily: "'Lato', sans-serif" }}>
+            {'Copyright © '}
+            <Link color="inherit" href="https://www.white-hat.co.il/" style={{ fontFamily: "'Lato', sans-serif" }}>
+                White Hat
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
 }
 
 
@@ -48,6 +50,7 @@ export default function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const classes = useStyles();
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -55,6 +58,9 @@ export default function SignUp() {
         try {
             const result = await registerUser(userData);
             console.log('Signup successful:', result);
+            localStorage.setItem('token', result.token);
+            localStorage.setItem('user', JSON.stringify(result.newUser));
+            navigate("/");
             // Redirect or update UI upon successful signup
         } catch (error) {
             console.error('Error during signup:', error);
@@ -64,115 +70,115 @@ export default function SignUp() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <Box
-            sx={{
-                marginTop: 8,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-            }}
-            >
-            <Typography variant="h6" className={classes.title}>
-                <img src={Logo} alt="Logo" className={classes.logo} />
-            </Typography>
-            <Typography component="h1" variant="h5" style={{ fontFamily: "'Lato', sans-serif" }}>
-                Sign up
-            </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                        autoComplete="given-name"
-                        name="firstName"
-                        required
-                        fullWidth
-                        id="firstName"
-                        label="First Name"
-                        autoFocus
-                        onChange={(e) => setFirstName(e.target.value)}
-                        InputLabelProps={{
-                            style: { fontFamily: "'Lato', sans-serif" },
-                        }}
-                        InputProps={{
-                            style: { fontFamily: "'Lato', sans-serif" },
-                        }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                        required
-                        fullWidth
-                        id="lastName"
-                        label="Last Name"
-                        name="lastName"
-                        autoComplete="family-name"
-                        onChange={(e) => setLastName(e.target.value)}
-                        InputLabelProps={{
-                            style: { fontFamily: "'Lato', sans-serif" },
-                        }}
-                        InputProps={{
-                            style: { fontFamily: "'Lato', sans-serif" },
-                        }}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                        InputLabelProps={{
-                            style: { fontFamily: "'Lato', sans-serif" },
-                        }}
-                        InputProps={{
-                            style: { fontFamily: "'Lato', sans-serif" },
-                        }}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="new-password"
-                        onChange={(e) => setPassword(e.target.value)}
-                        InputLabelProps={{
-                            style: { fontFamily: "'Lato', sans-serif" },
-                        }}
-                        InputProps={{
-                            style: { fontFamily: "'Lato', sans-serif" },
-                        }}
-                        />
-                    </Grid>
-                </Grid>
-                <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                style={{ fontFamily: "'Lato', sans-serif" , backgroundColor: '#0254EC'}}
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
                 >
-                Sign Up
-                </Button>
-                <Grid container justifyContent="flex-end">
-                <Grid item>
-                    <Link href="/signin" variant="body2" style={{ fontFamily: "'Lato', sans-serif" }}>
-                    Already have an account? Sign in
-                    </Link>
-                </Grid>
-                </Grid>
-            </Box>
-            </Box>
-            <Copyright sx={{ mt: 5 }} />
-        </Container>
+                    <Typography variant="h6" className={classes.title}>
+                        <img src={Logo} alt="Logo" className={classes.logo} />
+                    </Typography>
+                    <Typography component="h1" variant="h5" style={{ fontFamily: "'Lato', sans-serif" }}>
+                        Sign up
+                    </Typography>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    autoComplete="given-name"
+                                    name="firstName"
+                                    required
+                                    fullWidth
+                                    id="firstName"
+                                    label="First Name"
+                                    autoFocus
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    InputLabelProps={{
+                                        style: { fontFamily: "'Lato', sans-serif" },
+                                    }}
+                                    InputProps={{
+                                        style: { fontFamily: "'Lato', sans-serif" },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="lastName"
+                                    label="Last Name"
+                                    name="lastName"
+                                    autoComplete="family-name"
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    InputLabelProps={{
+                                        style: { fontFamily: "'Lato', sans-serif" },
+                                    }}
+                                    InputProps={{
+                                        style: { fontFamily: "'Lato', sans-serif" },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    InputLabelProps={{
+                                        style: { fontFamily: "'Lato', sans-serif" },
+                                    }}
+                                    InputProps={{
+                                        style: { fontFamily: "'Lato', sans-serif" },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="new-password"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    InputLabelProps={{
+                                        style: { fontFamily: "'Lato', sans-serif" },
+                                    }}
+                                    InputProps={{
+                                        style: { fontFamily: "'Lato', sans-serif" },
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            style={{ fontFamily: "'Lato', sans-serif", backgroundColor: '#0254EC' }}
+                        >
+                            Sign Up
+                        </Button>
+                        <Grid container justifyContent="flex-end">
+                            <Grid item>
+                                <Link href="/signin" variant="body2" style={{ fontFamily: "'Lato', sans-serif" }}>
+                                    Already have an account? Sign in
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Box>
+                <Copyright sx={{ mt: 5 }} />
+            </Container>
         </ThemeProvider>
     );
 }
