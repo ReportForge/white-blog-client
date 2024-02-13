@@ -21,7 +21,7 @@ const HomePage = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   const handleCreatePost = () => {
-    navigate("/create-post"); // Navigate to the create post page
+    navigate("/create-post");
   };
 
   return (
@@ -76,8 +76,8 @@ const HomePage = () => {
           aria-label="add"
           style={{
             position: 'fixed',
-            bottom: theme.spacing(2),
-            right: theme.spacing(2),
+            bottom: theme.spacing(6),
+            right: theme.spacing(4),
             backgroundColor: '#2C5EE8'
           }}
           onClick={handleCreatePost}
