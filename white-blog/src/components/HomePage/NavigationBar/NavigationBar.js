@@ -12,25 +12,34 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   logo: {
-    maxHeight: '45px', // Increase logo size
+    maxHeight: '45px',
   },
   title: {
     flexGrow: 1,
-    display: 'flex', // Ensure the logo aligns to the left
+    display: 'flex',
     alignItems: 'center',
   },
 }));
 
 const NavigationBar = () => {
   const classes = useStyles();
-  const isLoggedIn = localStorage.getItem('token') !== null;
   const navigate = useNavigate();
+  
+  // Assuming user info is stored in local storage after login
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  console.log(user.email);
+
+  const isLoggedIn = localStorage.getItem('token') !== null;
 
   const handleLogout = () => {
     localStorage.clear();
     navigate("/");
   };
 
+  const handleUserManagement = () => {
+    // Navigate to user management page
+    navigate("/user-management");
+  };
 
   return (
     <div className={classes.root}>
@@ -39,40 +48,61 @@ const NavigationBar = () => {
           <Typography variant="h6" className={classes.title}>
             <img src={Logo} alt="Logo" className={classes.logo} />
           </Typography>
-          {!isLoggedIn ?
+          {!isLoggedIn ? (
             <Button
               variant="contained"
               href="/signin"
               style={{ fontFamily: "'Lato', sans-serif" }}
               sx={{
-
                 height: "30px",
-                borderRadius: '20px', // Adjust for desired roundness
-                backgroundColor: '#2C5EE8', // Button color
-                color: 'white', // Text color
+                borderRadius: '20px',
+                backgroundColor: '#2C5EE8',
+                color: 'white',
                 '&:hover': {
-                  backgroundColor: '#204eb7', // Color on hover
+                  backgroundColor: '#204eb7',
                 },
               }}
             >
               Sign In
-            </Button> : <Button
-              variant="contained"
-              style={{ fontFamily: "'Lato', sans-serif" }}
-              onClick={handleLogout}
-              sx={{
-
-                height: "30px",
-                borderRadius: '20px', // Adjust for desired roundness
-                backgroundColor: '#2C5EE8', // Button color
-                color: 'white', // Text color
-                '&:hover': {
-                  backgroundColor: '#204eb7', // Color on hover
-                },
-              }}
-            >
-              Log Out
-            </Button>}
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="contained"
+                style={{ fontFamily: "'Lato', sans-serif", marginRight: '10px' }}
+                onClick={handleLogout}
+                sx={{
+                  height: "30px",
+                  borderRadius: '20px',
+                  backgroundColor: '#2C5EE8',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: '#204eb7',
+                  },
+                }}
+              >
+                Log Out
+              </Button>
+              {user.email === "danelyehuda@gmail.com" && (
+                <Button
+                  variant="contained"
+                  style={{ fontFamily: "'Lato', sans-serif" }}
+                  onClick={handleUserManagement}
+                  sx={{
+                    height: "30px",
+                    borderRadius: '20px',
+                    backgroundColor: '#FFA500', // Different color for emphasis
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: '#cc8400',
+                    },
+                  }}
+                >
+                  User Management
+                </Button>
+              )}
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </div>

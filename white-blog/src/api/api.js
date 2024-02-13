@@ -66,3 +66,43 @@ export const createBlogPost = async (postData, token) => {
 };
 
 
+export const getAllUsers = async (token) => {
+  try{
+    const response = await axiosInstance.get('/api/users',{
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+// Function to set a user as an editor
+export const setUserAsEditor = async (userId, token) => {
+  try {
+    const response = await axiosInstance.put(`/api/users/${userId}/set-editor`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Assuming you use Bearer token for authentication
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+// Function to remove editor status from a user
+export const removeEditorStatus = async (userId, token) => {
+  try {
+    const response = await axiosInstance.put(`/api/users/${userId}/remove-editor`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Assuming you use Bearer token for authentication
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
