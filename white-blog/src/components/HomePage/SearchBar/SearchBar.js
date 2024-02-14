@@ -65,28 +65,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SearchBar = () => {
+const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [activeTag, setActiveTag] = useState(null);
 
   // Array of tag strings
-  const tags = ['News', 'Product', 'Technology', 'Education','News', 'Product'];
+  const tags = ['News', 'Product', 'Technology', 'Education', 'News', 'Product'];
 
-  const handleButtonClick = (index) => {
-    setActiveTag(activeTag === index ? null : index);
+  const handleButtonClick = (tag, index) => {
+    // Toggle the active state of the tag
+    const newActiveTag = activeTag === index ? null : index;
+    setActiveTag(newActiveTag);
+
+    // Update the selected tag for filtering, or reset if no tag is active
+    setSelectedTag(newActiveTag !== null ? tag : null);
   };
+
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
 
   return (
     <div className={classes.root}>
       <AppBar position="static" color="inherit" elevation={0}>
         <Toolbar className={classes.bar}>
           <Box className={classes.tagsContainer}>
-            <Box className={classes.tagButtons} sx={{marginBottom: theme.spacing(1)}}>
-              <Typography variant={isMobile ? 'body' : 'h6'} style={{ fontFamily: "'Lato', sans-serif" , color: '#64748B'}} sx={{marginTop: theme.spacing(0.7), marginRight: theme.spacing(0.8)}}>
+            <Box className={classes.tagButtons} sx={{ marginBottom: theme.spacing(1) }}>
+              <Typography variant={isMobile ? 'body' : 'h6'} style={{ fontFamily: "'Lato', sans-serif", color: '#64748B' }} sx={{ marginTop: theme.spacing(0.7), marginRight: theme.spacing(0.8) }}>
                 Tags
-              </Typography> 
+              </Typography>
               {tags.map((tag, index) => (
                 <Button key={index} className={classes.tagButton} sx={{
                   borderRadius: '20px',
@@ -100,7 +111,7 @@ const SearchBar = () => {
                   },
                 }}
                   variant="contained"
-                  onClick={() => handleButtonClick(index)}>
+                  onClick={() => handleButtonClick(tag, index)}>
                   {tag}
                 </Button>
               ))}
@@ -110,6 +121,7 @@ const SearchBar = () => {
             className={`${classes.searchField} ${classes.placeholder}`}
             variant="outlined"
             placeholder="Search..."
+            onChange={handleSearchChange}
             InputProps={{
               style: {
                 backgroundColor: '#f0f3f7',
@@ -120,7 +132,7 @@ const SearchBar = () => {
               },
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton edge="end" size="medium" sx={{backgroundColor: '#FFFFFF'}}>
+                  <IconButton edge="end" size="medium" sx={{ backgroundColor: '#FFFFFF' }}>
                     <SearchIcon />
                   </IconButton>
                 </InputAdornment>

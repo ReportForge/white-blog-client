@@ -20,6 +20,8 @@ const HomePage = () => {
   const [isAppBarHovered, setIsAppBarHovered] = useState(false);
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const [selectedTag, setSelectedTag] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleCreatePost = () => {
     navigate("/post-editor");
@@ -67,13 +69,13 @@ const HomePage = () => {
       <Box sx={{ height: '1px', backgroundColor: '#E5E7EB', width: '100%', marginY: theme.spacing(0.5) }} />
       <Box >
         <Container maxWidth={isMobile ? 'xs' : 'lg'}>
-          <SearchBar />
+          <SearchBar setSelectedTag={setSelectedTag} setSearchTerm={setSearchTerm}/>
         </Container>
       </Box>
       <Box sx={{ height: '1px', backgroundColor: '#E5E7EB', width: '100%', marginY: theme.spacing(0.5), marginTop: isMobile ? '15px' : null }} />
       <Box >
         <Container maxWidth={isMobile ? 'xs' : 'lg'}>
-          <BlogPostsGrid />
+          <BlogPostsGrid selectedTag={selectedTag} searchTerm={searchTerm}/>
         </Container>
       </Box>
       {user.isEditor && (
