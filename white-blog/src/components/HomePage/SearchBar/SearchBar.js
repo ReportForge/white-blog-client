@@ -72,7 +72,7 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
   const [activeTag, setActiveTag] = useState(null);
 
   // Array of tag strings
-  const tags = ['News', 'Product', 'Technology', 'Education', 'News', 'Product'];
+  const tags = ['News', 'Product', 'Research', 'Security','Public Sector'];
 
   const handleButtonClick = (tag, index) => {
     // Toggle the active state of the tag
