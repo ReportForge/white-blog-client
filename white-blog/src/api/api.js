@@ -34,7 +34,7 @@ export const loginUser = async (credentials) => {
 // Function to fetch all blog posts
 export const fetchAllBlogPosts = async () => {
   try {
-    const response = await axiosInstance.get('/api/blogs');
+    const response = await axiosInstance.get('/api/posts');
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -44,7 +44,7 @@ export const fetchAllBlogPosts = async () => {
 // Function to fetch a single blog post by ID
 export const fetchBlogPostById = async (postId) => {
   try {
-    const response = await axiosInstance.get(`/api/blogs/${postId}`);
+    const response = await axiosInstance.get(`/api/posts/${postId}`);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -54,7 +54,7 @@ export const fetchBlogPostById = async (postId) => {
 // Function to create a new blog post
 export const createBlogPost = async (postData, token) => {
   try {
-    const response = await axiosInstance.post('/api/blogs', postData, {
+    const response = await axiosInstance.post('/api/posts', postData, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },

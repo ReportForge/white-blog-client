@@ -40,7 +40,7 @@ const NavigationBar = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="inherit" elevation="0">
+      <AppBar position="static" color="inherit" elevation={0}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <img src={Logo} alt="Logo" className={classes.logo} />

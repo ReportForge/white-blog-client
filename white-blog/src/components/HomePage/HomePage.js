@@ -12,6 +12,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Fab from '@mui/material/Fab';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import { useNavigate } from 'react-router-dom';
+import BlogPostsGrid from '../BlogPostsGrid/BlogPostsGrid'
 
 const HomePage = () => {
   const theme = useTheme();
@@ -70,6 +71,11 @@ const HomePage = () => {
         </Container>
       </Box>
       <Box sx={{ height: '1px', backgroundColor: '#E5E7EB', width: '100%', marginY: theme.spacing(0.5), marginTop: isMobile ? '15px' : null }} />
+      <Box >
+        <Container maxWidth={isMobile ? 'xs' : 'lg'}>
+          <BlogPostsGrid />
+        </Container>
+      </Box>
       {user.isEditor && (
         <Fab
           color="primary"
