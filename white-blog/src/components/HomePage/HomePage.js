@@ -21,7 +21,7 @@ const HomePage = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   const handleCreatePost = () => {
-    navigate("/create-post");
+    navigate("/post-editor");
   };
 
   return (

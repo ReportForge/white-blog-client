@@ -21,7 +21,7 @@ function App() {
       
         // Refresh the page to reflect changes (e.g., redirect to login page or update UI)
         window.location.href = '/';
-      }, 1000 * 60 * 1); // 1 minute for demonstration, change to 30 minutes or as neede      
+      }, 1000 * 60 * 60); // 1 minute for demonstration, change to 30 minutes or as neede      
     };
 
     // Events that should reset the timer
