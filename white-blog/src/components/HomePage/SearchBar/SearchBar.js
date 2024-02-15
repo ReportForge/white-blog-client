@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: { // Apply styles for screens larger than 'sm'
       flexDirection: 'row', // Revert to horizontal layout for larger screens
       justifyContent: 'space-between', // Spreads out toolbar content
-      alignItems: 'flex-end', // Align items to the end on larger screens
     },
   },
   searchField: {
