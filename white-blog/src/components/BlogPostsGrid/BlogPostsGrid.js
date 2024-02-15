@@ -12,7 +12,9 @@ function BlogPostsGrid({ selectedTag, searchTerm }) { // Receive searchTerm as a
       try {
         setLoading(true);
         const posts = await fetchAllBlogPosts();
-        setBlogPosts(posts);
+        // Filter out draft posts
+        const publishedPosts = posts.filter(post => !post.isDraft);
+        setBlogPosts(publishedPosts);
       } catch (error) {
         console.error('Failed to fetch blog posts:', error);
       } finally {

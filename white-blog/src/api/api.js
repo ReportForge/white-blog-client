@@ -67,8 +67,8 @@ export const createBlogPost = async (postData, token) => {
 
 
 export const getAllUsers = async (token) => {
-  try{
-    const response = await axiosInstance.get('/api/users',{
+  try {
+    const response = await axiosInstance.get('/api/users', {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -104,5 +104,47 @@ export const removeEditorStatus = async (userId, token) => {
     return response.data;
   } catch (error) {
     throw error.response.data;
+  }
+};
+
+// Function to save or update a draft blog post
+export const saveDraftBlogPost = async (draftData, token) => {
+  try {
+    const response = await axiosInstance.post('/api/posts/draft', draftData, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Include the auth token in the request headers
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+// Function to fetch the current user's draft blog post
+export const fetchDraftBlogPost = async (token) => {
+  try {
+    const response = await axiosInstance.get('/api/posts/draft', {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Authorization header with the user's token
+      },
+    });
+    return response.data; // The draft post data
+  } catch (error) {
+    throw error.response.data; // Error handling
+  }
+};
+
+// Function to delete the current user's draft blog post
+export const deleteDraftBlogPost = async (token) => {
+  try {
+    const response = await axiosInstance.delete('/api/posts/draft', {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Authorization header with the user's token
+      },
+    });
+    return response.data; // Confirmation of the draft post deletion
+  } catch (error) {
+    throw error.response.data; // Error handling
   }
 };

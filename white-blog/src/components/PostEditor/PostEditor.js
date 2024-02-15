@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   TextField,
@@ -11,13 +11,14 @@ import {
   FormControl,
   InputLabel,
   Avatar,
-  Grid
+  Grid,
+  CircularProgress,
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import { createBlogPost } from '../../api/api';
-
+import { createBlogPost, saveDraftBlogPost, fetchDraftBlogPost, deleteDraftBlogPost } from '../../api/api';
+import { useNavigate } from 'react-router-dom';
 
 function PostEditor() {
   const [blogPost, setBlogPost] = useState({
@@ -31,9 +32,35 @@ function PostEditor() {
     contentBlocks: [{ type: 'text', content: '' }],
   });
 
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.log('No token found, user not logged in');
+      return;
+    }
+
+    const loadDraft = async () => {
+      setLoading(true);
+      try {
+        const draft = await fetchDraftBlogPost(token);
+        if (draft) {
+          setBlogPost({ ...draft, publishDate: new Date(draft.publishDate) });
+        }
+      } catch (error) {
+        console.error('Error fetching draft:', error.message);
+      } finally {
+        setLoading(false); // Stop loading regardless of the outcome
+      }
+    };
+
+    loadDraft();
+  }, []);
+
   const handleInputChange = (e, index, field, subField = null) => {
     const newBlogPost = { ...blogPost };
-
     if (field === 'contentBlocks' && subField) {
       // Update only the specified subField ('content') of the content block at the given index
       newBlogPost[field] = blogPost[field].map((block, idx) => {
@@ -53,6 +80,26 @@ function PostEditor() {
     }
 
     setBlogPost(newBlogPost);
+  };
+
+  const saveDraft = async () => {
+    const user = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+
+    if (!user || !token) {
+      console.error('User not logged in');
+      // Redirect to login or show an error
+      return;
+    }
+
+    try {
+      const draftData = { ...blogPost, userId: JSON.parse(user).id }; // Assuming your user object has an id field
+      await saveDraftBlogPost(draftData, token);
+      navigate('/'); // Redirect to home after saving the draft
+    } catch (error) {
+      console.error('Error saving draft:', error.message);
+      // Handle error, maybe show a message to the user
+    }
   };
 
 
@@ -165,30 +212,50 @@ function PostEditor() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
-    // Retrieve the authentication token from where you store it, e.g., localStorage
     const token = localStorage.getItem('token');
-  
+
     if (!token) {
       console.error('No token found');
-      // Handle the absence of a token, e.g., redirect to login page
       return;
     }
-  
-    // API call to create a new blog post
+
+    // Destructure the userId and _id property out and keep the rest of the properties in a new object
+    // Also, explicitly set isDraft to false to indicate this is a final post
+    const { userId, _id, ...postData } = blogPost;
+    const finalPostData = { ...postData, isDraft: false }; // Add isDraft: false to the postData
+
     try {
-      const response = await createBlogPost(blogPost, token);
-   // blogPost is your state variable holding the post data
+      const response = await createBlogPost(finalPostData, token); // Use finalPostData with isDraft set to false
       console.log('Post created successfully:', response);
-  
-      // Here you can handle what happens after successful post creation,
-      // such as redirecting to the new post or displaying a success message.
-  
+
+      // After successful post creation, delete the draft
+      try {
+        await deleteDraftBlogPost(token);
+        console.log('Draft deleted successfully');
+      } catch (deleteError) {
+        console.error('Error deleting draft:', deleteError.message);
+      }
+
+      navigate('/'); // Redirect to home
     } catch (error) {
       console.error('Error creating post:', error.message);
-      // Handle API call errors, e.g., display an error message to the user
     }
   };
+
+
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh" // Adjust the height as needed
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Container component="main" maxWidth="md">
@@ -333,69 +400,71 @@ function PostEditor() {
 
         {/* Content Blocks */}
         {blogPost.contentBlocks.map((block, index) => (
-        <Box key={index}>
-          <FormControl fullWidth>
-            <InputLabel>Type</InputLabel>
-            <Select
-              value={block.type}
-              label="Type"
-              onChange={(e) => handleContentBlockTypeChange(index, e.target.value)}
-              style={{ marginBottom: '2rem' }}
-            >
-              <MenuItem value="bigTitle">Big Title</MenuItem>
-              <MenuItem value="smallTitle">Small Title</MenuItem>
-              <MenuItem value="image">Image</MenuItem>
-              <MenuItem value="text">Text Paragraph</MenuItem>
-            </Select>
-          </FormControl>
+          <Box key={index}>
+            <FormControl fullWidth>
+              <InputLabel>Type</InputLabel>
+              <Select
+                value={block.type}
+                label="Type"
+                onChange={(e) => handleContentBlockTypeChange(index, e.target.value)}
+                style={{ marginBottom: '2rem' }}
+              >
+                <MenuItem value="bigTitle">Big Title</MenuItem>
+                <MenuItem value="smallTitle">Small Title</MenuItem>
+                <MenuItem value="image">Image</MenuItem>
+                <MenuItem value="text">Text Paragraph</MenuItem>
+              </Select>
+            </FormControl>
 
-          {block.type === 'image' ? (
-            <Box>
-              {block.content && (
-                <img src={block.content} alt="Content Block Image" style={{ width: '720px', maxHeight: '350px', objectFit: 'contain' }} />
-              )}
-              <input
-                accept="image/*"
-                type="file"
-                style={{ display: 'none' }}
-                id={`content-block-image-${index}`}
-                onChange={(event) => handleContentBlockImageChange(index, event)}
+            {block.type === 'image' ? (
+              <Box>
+                {block.content && (
+                  <img src={block.content} alt="Content Block Image" style={{ width: '720px', maxHeight: '350px', objectFit: 'contain' }} />
+                )}
+                <input
+                  accept="image/*"
+                  type="file"
+                  style={{ display: 'none' }}
+                  id={`content-block-image-${index}`}
+                  onChange={(event) => handleContentBlockImageChange(index, event)}
+                />
+                <label htmlFor={`content-block-image-${index}`}>
+                  <Button variant="contained" component="span">
+                    Upload Image
+                  </Button>
+                </label>
+              </Box>
+            ) : (
+              <TextField
+                label={block.type === 'bigTitle' || block.type === 'smallTitle' ? "Title" : "Content"}
+                fullWidth
+                multiline={block.type === 'text'}
+                rows={block.type === 'text' ? 4 : 1}
+                value={block.content}
+                onChange={(e) => handleContentChange(index, e.target.value)}
+                InputProps={{
+                  style: {
+                    fontWeight: block.type === 'bigTitle' ? 800 : block.type === 'smallTitle' ? 700 : 400,
+                    fontSize: block.type === 'bigTitle' ? '2.25em' : block.type === 'smallTitle' ? '1.5rem' : '1rem',
+                  },
+                }}
               />
-              <label htmlFor={`content-block-image-${index}`}>
-                <Button variant="contained" component="span">
-                  Upload Image
-                </Button>
-              </label>
-            </Box>
-          ) : (
-            <TextField
-              label={block.type === 'bigTitle' || block.type === 'smallTitle' ? "Title" : "Content"}
-              fullWidth
-              multiline={block.type === 'text'}
-              rows={block.type === 'text' ? 4 : 1}
-              value={block.content}
-              onChange={(e) => handleContentChange(index, e.target.value)}
-              InputProps={{
-                style: {
-                  fontWeight: block.type === 'bigTitle' ? 800 : block.type === 'smallTitle' ? 700 : 400,
-                  fontSize: block.type === 'bigTitle' ? '2.25em' : block.type === 'smallTitle' ? '1.5rem' : '1rem',
-                },
-              }}
-            />
-          )}
+            )}
 
-          <IconButton onClick={() => removeContentBlock(index)}>
-            <RemoveCircleOutlineIcon />
-          </IconButton>
-          {index === blogPost.contentBlocks.length - 1 && (
-            <IconButton onClick={addContentBlock}>
-              <AddCircleOutlineIcon />
+            <IconButton onClick={() => removeContentBlock(index)}>
+              <RemoveCircleOutlineIcon />
             </IconButton>
-          )}
-        </Box>
-      ))}
+            {index === blogPost.contentBlocks.length - 1 && (
+              <IconButton onClick={addContentBlock}>
+                <AddCircleOutlineIcon />
+              </IconButton>
+            )}
+          </Box>
+        ))}
 
-
+        <Button type="button" variant="outlined" sx={{ mt: 3, mb: 2, mr: 2 }} onClick={saveDraft}>
+          Save for Now
+        </Button>
         <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
           Create Post
         </Button>

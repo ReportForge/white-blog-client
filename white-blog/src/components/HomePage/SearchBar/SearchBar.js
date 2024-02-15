@@ -72,7 +72,6 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
   const [activeTag, setActiveTag] = useState('All');
   const [searchParams] = useSearchParams();
   const initialTag = searchParams.get('tag');
-  console.log(initialTag);
 
   useEffect(() => {
     if (initialTag) {
