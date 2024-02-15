@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState,useEffect } from 'react';
 import Container from '@mui/material/Container';
 import NavigationBar from './NavigationBar/NavigationBar';
 import SearchBar from './SearchBar/SearchBar';
@@ -13,6 +13,7 @@ import Fab from '@mui/material/Fab';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import { useNavigate } from 'react-router-dom';
 import BlogPostsGrid from '../BlogPostsGrid/BlogPostsGrid'
+import { useSearchParams } from 'react-router-dom';
 
 const HomePage = () => {
   const theme = useTheme();
@@ -22,10 +23,18 @@ const HomePage = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [selectedTag, setSelectedTag] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams] = useSearchParams();
+  const initialTag = searchParams.get('tag');
 
   const handleCreatePost = () => {
     navigate("/post-editor");
   };
+
+  useEffect(() => {
+    if (initialTag) {
+      setSelectedTag(initialTag);
+    }
+  }, [initialTag]);
 
   return (
     <>
@@ -69,13 +78,13 @@ const HomePage = () => {
       <Box sx={{ height: '1px', backgroundColor: '#E5E7EB', width: '100%', marginY: theme.spacing(0.5) }} />
       <Box >
         <Container maxWidth={isMobile ? 'xs' : 'lg'}>
-          <SearchBar setSelectedTag={setSelectedTag} setSearchTerm={setSearchTerm}/>
+          <SearchBar setSelectedTag={setSelectedTag} setSearchTerm={setSearchTerm} />
         </Container>
       </Box>
       <Box sx={{ height: '1px', backgroundColor: '#E5E7EB', width: '100%', marginY: theme.spacing(0.5), marginTop: isMobile ? '15px' : null }} />
       <Box >
         <Container maxWidth={isMobile ? 'xs' : 'lg'}>
-          <BlogPostsGrid selectedTag={selectedTag} searchTerm={searchTerm}/>
+          <BlogPostsGrid selectedTag={selectedTag} searchTerm={searchTerm} />
         </Container>
       </Box>
       {user.isEditor && (

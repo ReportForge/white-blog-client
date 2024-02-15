@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -11,6 +11,7 @@ import { makeStyles } from '@mui/styles';
 import Box from '@mui/material/Box'; // Import Box component
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { useSearchParams } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,18 +70,23 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [activeTag, setActiveTag] = useState(null);
+  const [activeTag, setActiveTag] = useState('All');
+  const [searchParams] = useSearchParams();
+  const initialTag = searchParams.get('tag');
+  console.log(initialTag);
+
+  useEffect(() => {
+    if (initialTag) {
+      setActiveTag(initialTag);
+    }
+  }, [initialTag]);
 
   // Array of tag strings
-  const tags = ['News', 'Product', 'Research', 'Security','Public Sector'];
+  const tags = ['All','News', 'Product', 'Research', 'Security','Public Sector'];
 
-  const handleButtonClick = (tag, index) => {
-    // Toggle the active state of the tag
-    const newActiveTag = activeTag === index ? null : index;
-    setActiveTag(newActiveTag);
-
-    // Update the selected tag for filtering, or reset if no tag is active
-    setSelectedTag(newActiveTag !== null ? tag : null);
+  const handleButtonClick = (tag) => {
+    setSelectedTag(tag === 'All' ? null : tag);
+    setActiveTag(tag);
   };
 
 
@@ -98,20 +104,20 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
               <Typography variant={isMobile ? 'body' : 'h6'} style={{ fontFamily: "'Lato', sans-serif", color: '#64748B' }} sx={{ marginTop: theme.spacing(0.7), marginRight: theme.spacing(0.8) }}>
                 Tags
               </Typography>
-              {tags.map((tag, index) => (
-                <Button key={index} className={classes.tagButton} sx={{
+              {tags.map((tag) => (
+                <Button key={tag} className={classes.tagButton} sx={{
                   borderRadius: '20px',
                   fontSize: '11px',
                   marginLeft: '10px',
                   marginTop: isMobile ? theme.spacing(1) : theme.spacing(0.5),
-                  backgroundColor: activeTag === index ? '#204EB7' : '#f0f3f7',
-                  color: activeTag === index ? '#ffffff' : '#85909D',
+                  backgroundColor: activeTag === tag ? '#204EB7' : '#f0f3f7',
+                  color: activeTag === tag ? '#ffffff' : '#85909D',
                   '&:hover': {
-                    backgroundColor: activeTag === index ? '#204EB7' : '#f0f3f7',
+                    backgroundColor: activeTag === tag ?  '#204EB7' : '#f0f3f7',
                   },
                 }}
                   variant="contained"
-                  onClick={() => handleButtonClick(tag, index)}>
+                  onClick={() => handleButtonClick(tag)}>
                   {tag}
                 </Button>
               ))}

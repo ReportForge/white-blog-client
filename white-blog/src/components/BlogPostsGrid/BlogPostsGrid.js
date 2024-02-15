@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, CircularProgress, Box } from '@mui/material';
 import MiniBlogPost from '../MiniBlogPost/MiniBlogPost'; // Ensure this path is correct
 import { fetchAllBlogPosts } from '../../api/api'; // Ensure this path is correct
 
 function BlogPostsGrid({ selectedTag, searchTerm }) { // Receive searchTerm as a prop
   const [blogPosts, setBlogPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getBlogPosts = async () => {
       try {
+        setLoading(true);
         const posts = await fetchAllBlogPosts();
         setBlogPosts(posts);
       } catch (error) {
         console.error('Failed to fetch blog posts:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -31,6 +35,23 @@ function BlogPostsGrid({ selectedTag, searchTerm }) { // Receive searchTerm as a
       post.subTitle.toLowerCase().includes(searchTerm.toLowerCase())
     )
     : filteredPosts;
+
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh" // Adjust the height as needed
+      >
+        <CircularProgress
+          size={60} // Adjust the size as needed
+          style={{ color: 'primary.main' }} // Change the color using MUI's color system or custom CSS
+        />
+      </Box>
+    );
+  }
 
   return (
     <Grid container spacing={4}>
