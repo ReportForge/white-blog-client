@@ -83,18 +83,18 @@ function FullBlogPost() {
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 5, ml: '2rem' }}>
                         {authors.map((author, index) => (
                             <Box key={index} sx={{ mr: -1, display: 'inline' }}>
-                                <Avatar alt={author.name} src={author.image} sx={{ width: 48, height: 48, border: '2px solid white' }} />
+                                <Avatar alt={author.name} src={author.image} sx={{ width: isMobile? 38:48, height: isMobile? 38:48, border: '2px solid white' }} />
                             </Box>
                         ))}
                         <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3, mb: 1 }}>
-                            <Typography variant="body2" color="#323949" sx={{ fontWeight: 600, fontSize: '15px', fontFamily: "'Lato', sans-serif" }} >
+                            <Typography variant="body2" color="#323949" sx={{ fontWeight: 600, fontSize: '15px', fontFamily: "'Lato', sans-serif", textAlign: isMobile? 'left' : null}} >
                                 {authors.map((author, index) => (
                                     <span key={index}>
                                         {author.name}{index < authors.length - 1 ? ', ' : ''}
                                     </span>
                                 ))}
                             </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Lato', sans-serif", }}>
+                            <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Lato', sans-serif",textAlign: isMobile? 'left' : null }}>
                                 {new Date(publishDate).toLocaleDateString()}
                             </Typography>
                         </Box>
@@ -162,7 +162,6 @@ function FullBlogPost() {
                                     style={{
                                         fontSize: !isMobile ? '2rem' : '1.5rem',
                                         fontWeight: 700,
-                                        color: '#1E293B',
                                         marginBottom: '1rem',
                                         textAlign: 'left',
                                         fontFamily: "'Lato', sans-serif",
@@ -222,7 +221,7 @@ function FullBlogPost() {
                             '100%': { transform: 'scale(0)' }
                         }
                     }}>
-                    <img src={selectedImage} alt="Enlarged Blog Image" style={{ maxWidth: '100%', maxHeight: '90vh', cursor: 'zoom-out' }} />
+                    <img src={selectedImage} alt="Enlarged Blog" style={{ maxWidth: '100%', maxHeight: '90vh', cursor: 'zoom-out' }} />
                 </Box>
             </Modal>
         </>
