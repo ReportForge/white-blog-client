@@ -152,13 +152,16 @@ function FullBlogPost() {
                                         textAlign: 'left',
                                         fontFamily: "'Lato', sans-serif",
                                         color: '#374151'
-                                    }}>
+                                    }}
+                                    key={block._id || index}
+                                    >
                                     {block.content}
                                 </Typography>
                             case 'bigTitle':
                                 return <Typography
                                     variant="body1"
                                     component="div"
+                                    key={block._id || index}
                                     style={{
                                         fontSize: !isMobile ? '2rem' : '1.5rem',
                                         fontWeight: 700,

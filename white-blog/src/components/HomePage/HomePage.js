@@ -76,7 +76,7 @@ const HomePage = () => {
         </Container>
       </Box>
       <Box sx={{ height: '1px', backgroundColor: '#E5E7EB', width: '100%', marginY: theme.spacing(0.5) }} />
-      <Box >
+      <Box>
         <Container maxWidth={isMobile ? 'xs' : 'lg'}>
           <SearchBar setSelectedTag={setSelectedTag} setSearchTerm={setSearchTerm} />
         </Container>
