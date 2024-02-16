@@ -12,6 +12,7 @@ function FullBlogPost() {
     const [openModal, setOpenModal] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [isFixed, setIsFixed] = useState(false);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const navigate = useNavigate();
@@ -28,6 +29,27 @@ function FullBlogPost() {
 
         getBlogPost();
     }, [id]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const mainImageBottom = document.getElementById('main-image').getBoundingClientRect().bottom + window.scrollY;
+            const tocElement = document.getElementById('toc');
+
+            if (window.scrollY > mainImageBottom) {
+                setIsFixed(true);
+                // Optionally, set the top position dynamically based on header size or other elements
+                tocElement.style.position = 'fixed';
+                tocElement.style.top = '20px'; // Adjust this value as needed
+            } else {
+                setIsFixed(false);
+                tocElement.style.position = 'static';
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+    
 
     if (!blogPost) {
         return <div>Loading...</div>; // Or any other loading indicator
@@ -53,8 +75,19 @@ function FullBlogPost() {
         navigate(`/?tag=${tag}`); // Navigate to the HomePage with the tag as a query parameter
     };
 
+    const titlesForToC = contentBlocks.filter(block => block.type === 'bigTitle' || block.type === 'smallTitle').map((block, index) => ({
+        id: `title-${block.content}`, // Unique ID for scrolling
+        type: block.type,
+        content: block.content,
+    }));
+
+    const scrollToSection = (id) => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <>
+
             <Container maxWidth="lg"> {/* First part with maxWidth "lg" */}
                 <Box sx={{ my: 4 }}>
                     <Typography variant="h3"
@@ -83,18 +116,18 @@ function FullBlogPost() {
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 5, ml: '2rem' }}>
                         {authors.map((author, index) => (
                             <Box key={index} sx={{ mr: -1, display: 'inline' }}>
-                                <Avatar alt={author.name} src={author.image} sx={{ width: isMobile? 38:48, height: isMobile? 38:48, border: '2px solid white' }} />
+                                <Avatar alt={author.name} src={author.image} sx={{ width: isMobile ? 38 : 48, height: isMobile ? 38 : 48, border: '2px solid white' }} />
                             </Box>
                         ))}
                         <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3, mb: 1 }}>
-                            <Typography variant="body2" color="#323949" sx={{ fontWeight: 600, fontSize: '15px', fontFamily: "'Lato', sans-serif", textAlign: isMobile? 'left' : null}} >
+                            <Typography variant="body2" color="#323949" sx={{ fontWeight: 600, fontSize: '15px', fontFamily: "'Lato', sans-serif", textAlign: isMobile ? 'left' : null }} >
                                 {authors.map((author, index) => (
                                     <span key={index}>
                                         {author.name}{index < authors.length - 1 ? ', ' : ''}
                                     </span>
                                 ))}
                             </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Lato', sans-serif",textAlign: isMobile? 'left' : null }}>
+                            <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Lato', sans-serif", textAlign: isMobile ? 'left' : null }}>
                                 {new Date(publishDate).toLocaleDateString()}
                             </Typography>
                         </Box>
@@ -103,7 +136,7 @@ function FullBlogPost() {
                         </Typography>
                     </Box>
                     {mainImage && (
-                        <Box component="img" src={mainImage} alt="Main Blog Post Image" sx={{ width: '100%', borderRadius: 2, mb: 2 }} />
+                        <Box component="img" src={mainImage} alt="Main Blog Post Image" id="main-image" sx={{ width: '100%', borderRadius: 2, mb: 2 }} />
                     )}
                 </Box>
             </Container>
@@ -145,6 +178,7 @@ function FullBlogPost() {
                                 return <Typography
                                     variant="body1"
                                     component="div"
+                                    id={`title-${block.content}`}
                                     style={{
                                         fontSize: !isMobile ? '1.3rem' : '1rem',
                                         fontWeight: 700,
@@ -154,13 +188,14 @@ function FullBlogPost() {
                                         color: '#374151'
                                     }}
                                     key={block._id || index}
-                                    >
+                                >
                                     {block.content}
                                 </Typography>
                             case 'bigTitle':
                                 return <Typography
                                     variant="body1"
                                     component="div"
+                                    id={`title-${block.content}`}
                                     key={block._id || index}
                                     style={{
                                         fontSize: !isMobile ? '2rem' : '1.5rem',
@@ -227,6 +262,27 @@ function FullBlogPost() {
                     <img src={selectedImage} alt="Enlarged Blog" style={{ maxWidth: '100%', maxHeight: '90vh', cursor: 'zoom-out' }} />
                 </Box>
             </Modal>
+            {/* TOC */}
+            <Box id="toc" sx={{ width: 200, maxHeight: '60vh', overflowY: 'auto', textAlign: 'left', marginLeft: '5rem', marginTop: '3rem', fontFamily: "'Lato', sans-serif", }}>
+                <Typography sx={{ color: '#949AA3', textAlign: 'left', mr: '1.1rem', fontWeight: 600 }}>Contents</Typography>
+                {titlesForToC.map((title, index) => (
+                    <Typography
+                        key={index}
+                        sx={{
+                            '&:hover': {
+                                color: '#0f172a' // Color changes to #0f172a on hover
+                            },
+                            color: '#8D919A',
+                            fontSize: '0.8rem',
+                            cursor: 'pointer',
+                            mb: 1, ...(title.type === 'bigTitle' ? { fontWeight: 'bold' } : {})
+                        }}
+                        onClick={() => scrollToSection(title.id)}
+                    >
+                        {title.content}
+                    </Typography>
+                ))}
+            </Box>
         </>
     );
 }
