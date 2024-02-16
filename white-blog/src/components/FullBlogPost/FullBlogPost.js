@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchBlogPostById } from '../../api/api'; // Adjust the import path as necessary
-import { Container, Typography, Box, Avatar, CardMedia, Chip, Modal } from '@mui/material';
+import { Container, Typography, Box, Avatar, CardMedia, Chip, Modal, CircularProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,8 @@ function FullBlogPost() {
     const [isClosing, setIsClosing] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [isFixed, setIsFixed] = useState(false);
+    const [activeSection, setActiveSection] = useState(null);
+
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isMobileOrMedium = useMediaQuery(theme.breakpoints.down('xl'));
@@ -58,7 +60,17 @@ function FullBlogPost() {
 
 
     if (!blogPost) {
-        return <div>Loading...</div>; // Or any other loading indicator
+        return <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh" // Adjust the height as needed
+        >
+            <CircularProgress
+                size={60} // Adjust the size as needed
+                style={{ color: '#204EB7' }} // Change the color using MUI's color system or custom CSS
+            />
+        </Box>; // Or any other loading indicator
     }
 
     const { title, subTitle, authors, publishDate, mainImage, contentBlocks, readTime, tags } = blogPost;
@@ -88,8 +100,25 @@ function FullBlogPost() {
     }));
 
     const scrollToSection = (id) => {
-        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        setActiveSection(id);
+        const section = document.getElementById(id);
+
+        if (section) {
+            const sectionTop = section.getBoundingClientRect().top;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const offset = 100; // Adjust the offset as needed
+
+            // Calculate the target position
+            const targetPosition = sectionTop + scrollTop - offset;
+
+            // Smoothly scroll to the target position
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+        }
     };
+
 
     return (
         <>
@@ -270,17 +299,19 @@ function FullBlogPost() {
             </Modal>
             {/* Conditionally render ToC */}
             {!isMobileOrMedium && (
-                <Box id="toc" sx={{ width: 200, maxHeight: '60vh', overflowY: 'auto', textAlign: 'left', marginLeft: '5rem', marginTop: '3rem', fontFamily: "'Lato', sans-serif" }}>
-                    <Typography sx={{ color: '#949AA3', textAlign: 'left', mr: '1.1rem', fontWeight: 600 }}>Contents</Typography>
+                <Box id="toc" sx={{ width: 200, maxHeight: '60vh', overflowY: 'auto', textAlign: 'left', marginLeft: '5rem', marginTop: '6rem', fontFamily: "'Lato', sans-serif" }}>
+                    <Typography sx={{ color: '#64748B', textAlign: 'left', mr: '1.1rem', fontWeight: 600, mb: '1rem' }}>Contents</Typography>
                     {titlesForToC.map((title, index) => (
                         <Typography
                             key={index}
                             sx={{
                                 '&:hover': { color: '#0f172a' },
-                                color: '#8D919A',
+                                color: activeSection === title.id ? '#0f172a' : '#8D919A', // Change color if active
                                 fontSize: '0.8rem',
                                 cursor: 'pointer',
-                                mb: 1,
+                                mb: 2,
+                                pl: '5px', // Add space for the blue line
+                                borderLeft: activeSection === title.id ? '3px solid blue' : 'none', // Add blue line if active
                                 ...(title.type === 'bigTitle' ? { fontWeight: 'bold' } : {})
                             }}
                             onClick={() => scrollToSection(title.id)}

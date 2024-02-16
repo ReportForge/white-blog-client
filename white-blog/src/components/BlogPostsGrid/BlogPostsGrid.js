@@ -49,7 +49,7 @@ function BlogPostsGrid({ selectedTag, searchTerm }) { // Receive searchTerm as a
       >
         <CircularProgress
           size={60} // Adjust the size as needed
-          style={{ color: 'primary.main' }} // Change the color using MUI's color system or custom CSS
+          style={{ color: '#204EB7' }} // Change the color using MUI's color system or custom CSS
         />
       </Box>
     );

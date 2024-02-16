@@ -252,7 +252,10 @@ function PostEditor() {
         alignItems="center"
         minHeight="100vh" // Adjust the height as needed
       >
-        <CircularProgress />
+        <CircularProgress
+          size={60} // Adjust the size as needed
+          style={{ color: '#204EB7' }} // Change the color using MUI's color system or custom CSS
+        />
       </Box>
     );
   }
