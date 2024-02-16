@@ -117,6 +117,7 @@ export const saveDraftBlogPost = async (draftData, token) => {
     });
     return response.data;
   } catch (error) {
+    
     throw error.response.data;
   }
 };

@@ -14,6 +14,10 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     maxHeight: theme.spacing(6),
+    '&:hover': {
+      opacity: 0.7,
+      cursor: 'pointer',
+    }
   },
   title: {
     flexGrow: 1,
@@ -38,12 +42,19 @@ const NavigationBar = () => {
     navigate("/user-management");
   };
 
+  const goHome = () => {
+    navigate("/");
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="static" color="inherit" elevation={0}>
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            <img src={Logo} alt="Logo" className={classes.logo} />
+          <Typography
+            variant="h6"
+            className={classes.title}
+          >
+            <img src={Logo} alt="Logo" className={classes.logo} onClick={goHome}/>
           </Typography>
           {!isLoggedIn ? (
             <Button
