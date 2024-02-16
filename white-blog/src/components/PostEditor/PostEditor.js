@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Button,
   TextField,
@@ -34,6 +34,12 @@ function PostEditor() {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [isTitleInvalid, setIsTitleInvalid] = useState(false);
+  const [isFirstTag, setIsFirstTag] = useState(true);
+  const [isFirstAuthor, setIsFirstAuthor] = useState(true);
+  const [isFirstBlock, setIsFirstBlock] = useState(true);
+
+  const titleRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -85,6 +91,11 @@ function PostEditor() {
   const saveDraft = async () => {
     const user = localStorage.getItem('user');
     const token = localStorage.getItem('token');
+    if (!blogPost.title.trim()) {
+      setIsTitleInvalid(true);
+      titleRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return; // Prevent the form submission
+    }
 
     if (!user || !token) {
       console.error('User not logged in');
@@ -108,6 +119,7 @@ function PostEditor() {
       ...prevState,
       authors: [...prevState.authors, { name: '', image: '' }]
     }));
+    setIsFirstAuthor(false);
   };
 
   const removeAuthor = (index) => {
@@ -155,6 +167,7 @@ function PostEditor() {
     const newBlogPost = { ...blogPost };
     newBlogPost.tags.push('');
     setBlogPost(newBlogPost);
+    setIsFirstTag(false);
   };
 
   const removeTag = (index) => {
@@ -167,6 +180,7 @@ function PostEditor() {
     const newBlogPost = { ...blogPost };
     newBlogPost.contentBlocks.push({ type: 'text', content: '' });
     setBlogPost(newBlogPost);
+    setIsFirstBlock(false);
   };
 
   const removeContentBlock = (index) => {
@@ -213,6 +227,11 @@ function PostEditor() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const token = localStorage.getItem('token');
+    if (!blogPost.title.trim()) {
+      setIsTitleInvalid(true);
+      titleRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return; // Prevent the form submission
+    }
 
     if (!token) {
       console.error('No token found');
@@ -270,10 +289,13 @@ function PostEditor() {
           <TextField
             label="Title"
             fullWidth
+            ref={titleRef}
             margin="normal"
             variant="standard"
             value={blogPost.title}
             multiline
+            error={isTitleInvalid}
+            helperText={isTitleInvalid ? "Title is required" : ""}
             InputProps={{
               style: { fontSize: '3rem', fontWeight: 700 },
             }}
@@ -322,9 +344,9 @@ function PostEditor() {
                 style: { fontWeight: 'bold', fontSize: '15px' },
               }}
             />
-            <IconButton onClick={() => removeAuthor(index)}>
+            {!isFirstAuthor ? <IconButton onClick={() => removeAuthor(index)}>
               <RemoveCircleOutlineIcon />
-            </IconButton>
+            </IconButton> : null}
             {index === blogPost.authors.length - 1 && (
               <IconButton onClick={addAuthor}>
                 <AddCircleOutlineIcon />
@@ -365,9 +387,9 @@ function PostEditor() {
                 value={tag}
                 onChange={(e) => handleInputChange(e, index, 'tags')}
               />
-              <IconButton onClick={() => removeTag(index)}>
+              {!isFirstTag ? <IconButton onClick={() => removeTag(index)}>
                 <RemoveCircleOutlineIcon />
-              </IconButton>
+              </IconButton> : null}
               <IconButton onClick={addTag}>
                 <AddCircleOutlineIcon />
               </IconButton>
@@ -454,9 +476,9 @@ function PostEditor() {
               />
             )}
 
-            <IconButton onClick={() => removeContentBlock(index)}>
+            {!isFirstBlock ? <IconButton onClick={() => removeContentBlock(index)}>
               <RemoveCircleOutlineIcon />
-            </IconButton>
+            </IconButton> : null}
             {index === blogPost.contentBlocks.length - 1 && (
               <IconButton onClick={addContentBlock}>
                 <AddCircleOutlineIcon />
