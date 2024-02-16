@@ -15,6 +15,7 @@ function FullBlogPost() {
     const [isFixed, setIsFixed] = useState(false);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isMobileOrMedium = useMediaQuery(theme.breakpoints.down('xl'));
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,24 +33,29 @@ function FullBlogPost() {
 
     useEffect(() => {
         const handleScroll = () => {
-            const mainImageBottom = document.getElementById('main-image').getBoundingClientRect().bottom + window.scrollY;
+            const mainImage = document.getElementById('main-image');
             const tocElement = document.getElementById('toc');
 
-            if (window.scrollY > mainImageBottom) {
-                setIsFixed(true);
-                // Optionally, set the top position dynamically based on header size or other elements
-                tocElement.style.position = 'fixed';
-                tocElement.style.top = '20px'; // Adjust this value as needed
-            } else {
-                setIsFixed(false);
-                tocElement.style.position = 'static';
+            // Check if both elements exist before accessing their properties
+            if (mainImage && tocElement) {
+                const mainImageBottom = mainImage.getBoundingClientRect().bottom + window.scrollY;
+
+                if (window.scrollY > mainImageBottom) {
+                    setIsFixed(true);
+                    tocElement.style.position = 'fixed';
+                    tocElement.style.top = '20px'; // Adjust this value as needed
+                } else {
+                    setIsFixed(false);
+                    tocElement.style.position = 'static';
+                }
             }
         };
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-    
+
+
 
     if (!blogPost) {
         return <div>Loading...</div>; // Or any other loading indicator
@@ -262,27 +268,28 @@ function FullBlogPost() {
                     <img src={selectedImage} alt="Enlarged Blog" style={{ maxWidth: '100%', maxHeight: '90vh', cursor: 'zoom-out' }} />
                 </Box>
             </Modal>
-            {/* TOC */}
-            <Box id="toc" sx={{ width: 200, maxHeight: '60vh', overflowY: 'auto', textAlign: 'left', marginLeft: '5rem', marginTop: '3rem', fontFamily: "'Lato', sans-serif", }}>
-                <Typography sx={{ color: '#949AA3', textAlign: 'left', mr: '1.1rem', fontWeight: 600 }}>Contents</Typography>
-                {titlesForToC.map((title, index) => (
-                    <Typography
-                        key={index}
-                        sx={{
-                            '&:hover': {
-                                color: '#0f172a' // Color changes to #0f172a on hover
-                            },
-                            color: '#8D919A',
-                            fontSize: '0.8rem',
-                            cursor: 'pointer',
-                            mb: 1, ...(title.type === 'bigTitle' ? { fontWeight: 'bold' } : {})
-                        }}
-                        onClick={() => scrollToSection(title.id)}
-                    >
-                        {title.content}
-                    </Typography>
-                ))}
-            </Box>
+            {/* Conditionally render ToC */}
+            {!isMobileOrMedium && (
+                <Box id="toc" sx={{ width: 200, maxHeight: '60vh', overflowY: 'auto', textAlign: 'left', marginLeft: '5rem', marginTop: '3rem', fontFamily: "'Lato', sans-serif" }}>
+                    <Typography sx={{ color: '#949AA3', textAlign: 'left', mr: '1.1rem', fontWeight: 600 }}>Contents</Typography>
+                    {titlesForToC.map((title, index) => (
+                        <Typography
+                            key={index}
+                            sx={{
+                                '&:hover': { color: '#0f172a' },
+                                color: '#8D919A',
+                                fontSize: '0.8rem',
+                                cursor: 'pointer',
+                                mb: 1,
+                                ...(title.type === 'bigTitle' ? { fontWeight: 'bold' } : {})
+                            }}
+                            onClick={() => scrollToSection(title.id)}
+                        >
+                            {title.content}
+                        </Typography>
+                    ))}
+                </Box>
+            )}
         </>
     );
 }
