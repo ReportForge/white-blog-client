@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Logo from '../../assets/images/white_blog_logo.png';
+import Logo from '../../assets/images/logo.png';
 import { makeStyles } from '@mui/styles';
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   logo: {
-    maxHeight: '70px', // Increase logo size
+    maxHeight: '100px', // Increase logo size
   },
   title: {
     flexGrow: 1,

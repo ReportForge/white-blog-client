@@ -61,11 +61,12 @@ const UserManagement = () => {
                     fontWeight: 700,
                     color: '#1E293B',
                     textAlign: 'left',
-                    marginTop: '3rem'
+                    marginTop: '3rem',
+                    marginLeft: '2rem'
                 }}>
                 Users
             </Typography>
-            <Table>
+            <Table sx={{border: '3px solid #e0e0e0',borderRadius: theme.shape.borderRadius}}>
                 <TableHead>
                     <TableRow>
                         <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>Full Name</TableCell>

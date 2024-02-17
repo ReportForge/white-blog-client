@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { makeStyles } from '@mui/styles';
-import Logo from '../../../assets/images/white_blog_logo.png';
+import Logo from '../../../assets/images/logo.png';
 import { useNavigate } from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
 
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   logo: {
-    maxHeight: theme.spacing(6),
+    maxHeight: theme.spacing(7),
     '&:hover': {
       opacity: 0.7,
       cursor: 'pointer',
