@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchBlogPostById } from '../../api/api'; // Adjust the import path as necessary
-import { Container, Typography, Box, Avatar, CardMedia, Chip, Modal, CircularProgress } from '@mui/material';
+import { fetchBlogPostById, updateBlogPost } from '../../api/api'; // Adjust the import path as necessary
+import { Container, Typography, Box, Avatar, CardMedia, Chip, Modal, CircularProgress, Button, TextField, IconButton } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useNavigate } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 
 function FullBlogPost() {
     const { id } = useParams();
@@ -12,9 +14,10 @@ function FullBlogPost() {
     const [openModal, setOpenModal] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
-    const [isFixed, setIsFixed] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+    const [editedFields, setEditedFields] = useState({});
     const [activeSection, setActiveSection] = useState(null);
-
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isMobileOrMedium = useMediaQuery(theme.breakpoints.down('xl'));
@@ -43,11 +46,9 @@ function FullBlogPost() {
                 const mainImageBottom = mainImage.getBoundingClientRect().bottom + window.scrollY;
 
                 if (window.scrollY > mainImageBottom) {
-                    setIsFixed(true);
                     tocElement.style.position = 'fixed';
                     tocElement.style.top = '20px'; // Adjust this value as needed
                 } else {
-                    setIsFixed(false);
                     tocElement.style.position = 'static';
                 }
             }
@@ -57,7 +58,55 @@ function FullBlogPost() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const handleEditToggle = () => {
+        setEditMode(!editMode);
+    };
 
+    const handleChange = (field, value) => {
+        setEditedFields({ ...editedFields, [field]: value });
+    };
+
+    const handleSave = async (field) => {
+        const token = localStorage.getItem('token'); // Assuming you're storing the auth token in localStorage
+        if (field === 'contentBlocks') {
+            // When saving contentBlocks, use the editedFields.contentBlocks array
+            if (editedFields.contentBlocks && editedFields.contentBlocks.length > 0) {
+                try {
+                    await updateBlogPost(id, { contentBlocks: editedFields.contentBlocks }, token); // Update the contentBlocks field in your API
+                    setBlogPost({ ...blogPost, contentBlocks: editedFields.contentBlocks }); // Update local state to reflect the saved changes
+                    setEditedFields({ ...editedFields, contentBlocks: undefined }); // Clear the edited state for contentBlocks
+                    setEditMode(false); // Optionally exit edit mode upon successful save
+                } catch (error) {
+                    console.error('Failed to update content blocks:', error);
+                }
+            }
+        } else {
+            // Handle saving other fields similarly to how you've done before
+            const updatedValue = editedFields[field];
+            if (updatedValue !== undefined && updatedValue !== blogPost[field]) {
+                try {
+                    await updateBlogPost(id, { [field]: updatedValue }, token); // Update the specific field in your API
+                    setBlogPost({ ...blogPost, [field]: updatedValue }); // Update local state
+                    setEditedFields({ ...editedFields, [field]: undefined }); // Clear edited state for the field
+                    setEditMode(false); // Optionally exit edit mode
+                } catch (error) {
+                    console.error(`Failed to update blog post's ${field}:`, error);
+                }
+            }
+        }
+    };
+
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                handleChange('mainImage', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     if (!blogPost) {
         return <Box
@@ -124,30 +173,66 @@ function FullBlogPost() {
         <>
 
             <Container maxWidth="lg"> {/* First part with maxWidth "lg" */}
+                <Box marginTop='2rem'>{user.isEditor && <IconButton sx={{color:'#2c5ee8'}}  onClick={handleEditToggle}><EditIcon /></IconButton>}</Box>
                 <Box sx={{ my: 4 }}>
-                    <Typography variant="h3"
-                        component="h1"
-                        gutterBottom
-                        style={{
-                            fontSize: !isMobile ? '4rem' : '2.7rem',
-                            fontWeight: 700,
-                            color: '#1E293B',
-                            textAlign: isMobile ? 'left' : null
-                        }}>
-                        {title}
-                    </Typography>
-                    <Typography variant="h3"
-                        component="h1"
-                        gutterBottom
-                        style={{
-                            fontSize: !isMobile ? '1.5rem' : '1rem',
-                            fontWeight: 400,
-                            color: '#475569',
-                            textAlign: isMobile ? 'left' : null,
-                            marginBottom: '2rem'
-                        }}>
-                        {subTitle}
-                    </Typography>
+                    {/* Title */}
+                    {editMode ? (
+                        <>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                label="Title"
+                                defaultValue={title}
+                                onChange={(e) => handleChange('title', e.target.value)}
+                            />
+                            <IconButton onClick={() => handleSave('title')}>
+                                <SaveIcon />
+                            </IconButton>
+                        </>
+                    ) : (
+                        <Typography variant="h3"
+                            component="h1"
+                            gutterBottom
+                            style={{
+                                fontSize: !isMobile ? '4rem' : '2.7rem',
+                                fontWeight: 700,
+                                color: '#1E293B',
+                                textAlign: isMobile ? 'left' : null
+                            }}>
+                            {title}
+
+                        </Typography>
+                    )}
+                    {/* Subtitle */}
+                    {editMode ? (
+                        <>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                label="Title"
+                                defaultValue={title}
+                                onChange={(e) => handleChange('title', e.target.value)}
+                            />
+                            <IconButton onClick={() => handleSave('title')}>
+                                <SaveIcon />
+                            </IconButton>
+                        </>
+                    ) : (
+                        <Typography variant="h3"
+                            component="h1"
+                            gutterBottom
+                            style={{
+                                fontSize: !isMobile ? '1.5rem' : '1rem',
+                                fontWeight: 400,
+                                color: '#475569',
+                                textAlign: isMobile ? 'left' : null,
+                                marginBottom: '2rem'
+                            }}>
+                            {subTitle}
+
+                        </Typography>
+                    )}
+                    {/* Authors */}
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 5, ml: '2rem' }}>
                         {authors.map((author, index) => (
                             <Box key={index} sx={{ mr: -1, display: 'inline' }}>
@@ -170,8 +255,39 @@ function FullBlogPost() {
                             {readTime} minutes read
                         </Typography>
                     </Box>
-                    {mainImage && (
-                        <Box component="img" src={mainImage} alt="Main Blog Post Image" id="main-image" sx={{ width: '100%', borderRadius: 2, mb: 2 }} />
+                    {editMode ? (
+                        <>
+                            <Typography variant="h6" gutterBottom>Change Main Image</Typography>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                label="Image URL"
+                                defaultValue={mainImage}
+                            />
+                            <Box sx={{ mt: 2 }}>
+                                <Button component="label">
+                                    Upload New Image
+                                    <input
+                                        accept="image/*"
+                                        type="file"
+                                        hidden
+                                        onChange={handleImageUpload}
+                                        style={{ display: 'none' }}
+                                        id="image-upload"
+                                    />
+                                </Button>
+                            </Box>
+                            <IconButton sx={{ mt: 1 }} onClick={() => handleSave('mainImage')}>
+                                <SaveIcon />
+                            </IconButton>
+                        </>
+                    ) : (
+                        mainImage && (
+                            <>
+                                <Box component="img" src={mainImage} alt="Main Blog Post Image" id="main-image" sx={{ width: '100%', borderRadius: 2, mb: 2 }} />
+                                <Box></Box>
+                            </>
+                        )
                     )}
                 </Box>
             </Container>
@@ -182,7 +298,33 @@ function FullBlogPost() {
                         // Check the type of content and render accordingly
                         switch (block.type) {
                             case 'text':
-                                return <Typography sx={{
+                                return editMode ? (
+                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            multiline
+                                            minRows={3} // Adjust based on your preference
+                                            defaultValue={block.content}
+                                            onChange={(e) => {
+                                                // Create a deep copy of contentBlocks and update the content of the current block
+                                                const updatedBlocks = [...contentBlocks];
+                                                updatedBlocks[index].content = e.target.value;
+                                                setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
+                                            }}
+                                            sx={{
+                                                fontSize: !isMobile ? '1.2rem' : '1rem',
+                                                fontWeight: 400,
+                                                color: '#475569',
+                                                marginBottom: '2rem',
+                                                fontFamily: "'Lato', sans-serif",
+                                            }}
+                                        />
+                                        <IconButton onClick={() => handleSave('contentBlocks')}>
+                                            <SaveIcon />
+                                        </IconButton>
+                                    </Box>
+                                ) : <Typography sx={{
                                     fontSize: !isMobile ? '1.2rem' : '1rem',
                                     fontWeight: 400,
                                     color: '#475569',
@@ -192,6 +334,7 @@ function FullBlogPost() {
                                 }}
                                     key={block._id || index}>
                                     {block.content}
+
                                 </Typography>;
                             case 'image':
                                 return <CardMedia
@@ -210,7 +353,33 @@ function FullBlogPost() {
                                     key={block._id || index}
                                 />;
                             case 'smallTitle':
-                                return <Typography
+                                return editMode ? (
+                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            multiline
+                                            minRows={3} // Adjust based on your preference
+                                            defaultValue={block.content}
+                                            onChange={(e) => {
+                                                // Create a deep copy of contentBlocks and update the content of the current block
+                                                const updatedBlocks = [...contentBlocks];
+                                                updatedBlocks[index].content = e.target.value;
+                                                setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
+                                            }}
+                                            sx={{
+                                                fontSize: !isMobile ? '1.2rem' : '1rem',
+                                                fontWeight: 400,
+                                                color: '#475569',
+                                                marginBottom: '2rem',
+                                                fontFamily: "'Lato', sans-serif",
+                                            }}
+                                        />
+                                        <IconButton onClick={() => handleSave('contentBlocks')}>
+                                            <SaveIcon />
+                                        </IconButton>
+                                    </Box>
+                                ) : <Typography
                                     variant="body1"
                                     component="div"
                                     id={`title-${block.content}`}
@@ -225,9 +394,36 @@ function FullBlogPost() {
                                     key={block._id || index}
                                 >
                                     {block.content}
+
                                 </Typography>
                             case 'bigTitle':
-                                return <Typography
+                                return editMode ? (
+                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            multiline
+                                            minRows={3} // Adjust based on your preference
+                                            defaultValue={block.content}
+                                            onChange={(e) => {
+                                                // Create a deep copy of contentBlocks and update the content of the current block
+                                                const updatedBlocks = [...contentBlocks];
+                                                updatedBlocks[index].content = e.target.value;
+                                                setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
+                                            }}
+                                            sx={{
+                                                fontSize: !isMobile ? '1.2rem' : '1rem',
+                                                fontWeight: 400,
+                                                color: '#475569',
+                                                marginBottom: '2rem',
+                                                fontFamily: "'Lato', sans-serif",
+                                            }}
+                                        />
+                                        <IconButton onClick={() => handleSave('contentBlocks')}>
+                                            <SaveIcon />
+                                        </IconButton>
+                                    </Box>
+                                ) : <Typography
                                     variant="body1"
                                     component="div"
                                     id={`title-${block.content}`}
@@ -240,9 +436,112 @@ function FullBlogPost() {
                                         fontFamily: "'Lato', sans-serif",
                                         color: '#374151'
                                     }}
-                                >{block.content}
+                                >
+                                    {block.content}
+
                                 </Typography>
-                            // Add more cases here for different types of content blocks you might have
+                            // Inside the switch statement in your contentBlocks.map
+                            case 'bullet':
+                                return editMode ? (
+                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            multiline
+                                            minRows={3} // Adjust based on your preference
+                                            defaultValue={block.content}
+                                            onChange={(e) => {
+                                                // Create a deep copy of contentBlocks and update the content of the current block
+                                                const updatedBlocks = [...contentBlocks];
+                                                updatedBlocks[index].content = e.target.value;
+                                                setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
+                                            }}
+                                            sx={{
+                                                fontSize: !isMobile ? '1.2rem' : '1rem',
+                                                fontWeight: 400,
+                                                color: '#475569',
+                                                marginBottom: '2rem',
+                                                fontFamily: "'Lato', sans-serif",
+                                            }}
+                                        />
+                                        <IconButton onClick={() => handleSave('contentBlocks')}>
+                                            <SaveIcon />
+                                        </IconButton>
+                                    </Box>
+                                ) : (
+                                    <Box key={block._id || index} sx={{
+                                        display: 'flex',
+                                        alignItems: 'flex-start',
+                                        marginBottom: '0.5rem',
+                                        '&:before': {
+                                            content: '"•"', // Bullet point character
+                                            display: 'inline-block',
+                                            marginRight: '8px', // Space between bullet and text
+                                            color: '#2C5EE8', // Example: change bullet point color
+                                            fontWeight: 'bold', // Example: make bullet point bold
+                                            fontSize: '1.3rem', // // Bullet size, adjust as needed
+                                            lineHeight: 'inherit', // Align bullet with text
+                                        }
+                                    }}>
+                                        <Typography sx={{
+                                            fontSize: !isMobile ? '1.2rem' : '1rem',
+                                            fontWeight: 400,
+                                            color: '#475569',
+                                            textAlign: 'left',
+                                            fontFamily: "'Lato', sans-serif"
+                                        }}>
+                                            {block.content}
+
+                                        </Typography>
+                                    </Box>
+                                );
+                            case 'script':
+                                return editMode ? (
+                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            multiline
+                                            minRows={3} // Adjust based on your preference
+                                            defaultValue={block.content}
+                                            onChange={(e) => {
+                                                // Create a deep copy of contentBlocks and update the content of the current block
+                                                const updatedBlocks = [...contentBlocks];
+                                                updatedBlocks[index].content = e.target.value;
+                                                setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
+                                            }}
+                                            sx={{
+                                                fontSize: !isMobile ? '1.2rem' : '1rem',
+                                                fontWeight: 400,
+                                                color: '#475569',
+                                                marginBottom: '2rem',
+                                                fontFamily: "'Lato', sans-serif",
+                                            }}
+                                        />
+                                        <IconButton onClick={() => handleSave('contentBlocks')}>
+                                            <SaveIcon />
+                                        </IconButton>
+                                    </Box>
+                                ) : (
+                                    <Box
+                                        key={block._id || index}
+                                        sx={{
+                                            backgroundColor: '#F3F5FD',
+                                            color: '#3C6AEA',
+                                            padding: '16px',
+                                            borderRadius: '8px',
+                                            fontFamily: 'monospace',
+                                            fontSize: !isMobile ? '1rem' : '0.875rem',
+                                            whiteSpace: 'pre-wrap', // To ensure the script respects newline characters
+                                            marginBottom: '2rem',
+                                            overflowX: 'auto', // In case the script is wider than the container
+                                        }}
+                                    >
+                                        {block.content}
+
+                                    </Box>
+                                );
+
                             default:
                                 return null;
                         }

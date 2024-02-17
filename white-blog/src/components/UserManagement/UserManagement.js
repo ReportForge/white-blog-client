@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAllUsers, setUserAsEditor, removeEditorStatus } from '../../api/api'; // Adjust the import path according to your file structure
-import { Table, TableBody, TableCell, TableHead, TableRow, Button, Switch, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, Switch, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
@@ -21,7 +21,7 @@ const UserManagement = () => {
         };
 
         fetchUsers();
-    }, []);
+    });
 
     const handleEditorChange = async (userId, isEditor) => {
         try {

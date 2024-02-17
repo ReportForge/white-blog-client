@@ -117,7 +117,7 @@ export const saveDraftBlogPost = async (draftData, token) => {
     });
     return response.data;
   } catch (error) {
-    
+
     throw error.response.data;
   }
 };
@@ -145,6 +145,20 @@ export const deleteDraftBlogPost = async (token) => {
       },
     });
     return response.data; // Confirmation of the draft post deletion
+  } catch (error) {
+    throw error.response.data; // Error handling
+  }
+};
+
+// Function to update a blog post
+export const updateBlogPost = async (postId, postData, token) => {
+  try {
+    const response = await axiosInstance.put(`/api/posts/${postId}`, postData, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Include the auth token in the request headers
+      },
+    });
+    return response.data; // The updated post data
   } catch (error) {
     throw error.response.data; // Error handling
   }

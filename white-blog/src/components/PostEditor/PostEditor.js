@@ -65,6 +65,15 @@ function PostEditor() {
     loadDraft();
   }, []);
 
+  useEffect(() => {
+    const autoSaveInterval = setInterval(() => {
+      saveDraftWithoutNavigate();
+    }, 60000); // 60000 milliseconds = 1 minute
+
+    return () => clearInterval(autoSaveInterval); // Cleanup interval on component unmount
+  }, [blogPost]); // Dependency array, auto-save will trigger when blogPost changes
+
+
   const handleInputChange = (e, index, field, subField = null) => {
     const newBlogPost = { ...blogPost };
     if (field === 'contentBlocks' && subField) {
@@ -107,6 +116,30 @@ function PostEditor() {
       const draftData = { ...blogPost, userId: JSON.parse(user).id }; // Assuming your user object has an id field
       await saveDraftBlogPost(draftData, token);
       navigate('/'); // Redirect to home after saving the draft
+    } catch (error) {
+      console.error('Error saving draft:', error.message);
+      // Handle error, maybe show a message to the user
+    }
+  };
+
+  const saveDraftWithoutNavigate = async () => {
+    const user = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    if (!blogPost.title.trim()) {
+      setIsTitleInvalid(true);
+      titleRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return; // Prevent the form submission
+    }
+
+    if (!user || !token) {
+      console.error('User not logged in');
+      // Redirect to login or show an error
+      return;
+    }
+
+    try {
+      const draftData = { ...blogPost, userId: JSON.parse(user).id }; // Assuming your user object has an id field
+      await saveDraftBlogPost(draftData, token);
     } catch (error) {
       console.error('Error saving draft:', error.message);
       // Handle error, maybe show a message to the user
@@ -438,13 +471,16 @@ function PostEditor() {
                 <MenuItem value="smallTitle">Small Title</MenuItem>
                 <MenuItem value="image">Image</MenuItem>
                 <MenuItem value="text">Text Paragraph</MenuItem>
+                <MenuItem value="bullet">Bullet Point</MenuItem>
+                <MenuItem value="script">Script</MenuItem>
               </Select>
             </FormControl>
+
 
             {block.type === 'image' ? (
               <Box>
                 {block.content && (
-                  <img src={block.content} alt="Content Block Image" style={{ width: '720px', maxHeight: '350px', objectFit: 'contain' }} />
+                  <img src={block.content} alt="Content Block" style={{ width: '720px', maxHeight: '350px', objectFit: 'contain' }} />
                 )}
                 <input
                   accept="image/*"
@@ -458,6 +494,63 @@ function PostEditor() {
                     Upload Image
                   </Button>
                 </label>
+              </Box>
+            ) : block.type === 'bullet' ? (
+              <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                <Box sx={{
+                  '&:before': {
+                    content: '"•"', // This is the bullet point character
+                    display: 'inline-block',
+                    marginRight: '8px', // Adjust spacing between the bullet and the text
+                    marginTop: '20px', // Adjust to align with the TextField, might need further adjustment
+                    color: '#2C5EE8', // Example: change bullet point color
+                    fontWeight: 'bold', // Example: make bullet point bold
+                    fontSize: '1.5rem', //
+                  }
+                }} />
+                <TextField
+                  label="Bullet Point"
+                  fullWidth
+                  multiline
+                  variant="standard"
+                  value={block.content}
+                  onChange={(e) => handleContentChange(index, e.target.value)}
+                  InputProps={{
+                    style: {
+                      fontWeight: 400,
+                      fontSize: '1rem',
+                    },
+                  }}
+                />
+              </Box>
+            ) : block.type === 'script' ? (
+              <Box
+                sx={{
+                  backgroundColor: '#F3F5FD',
+                  color: '#3C6AEA',
+                  padding: '16px',
+                  borderRadius: '8px',
+                  fontFamily: 'monospace',
+                  fontSize: '0.875rem',
+                  whiteSpace: 'pre-wrap', // To ensure the script respects newline characters
+                  marginBottom: '2rem',
+                }}
+              >
+                <TextField
+                  label="Script"
+                  fullWidth
+                  multiline
+                  variant="standard"
+                  value={block.content}
+                  onChange={(e) => handleContentChange(index, e.target.value)}
+                  InputProps={{
+                    style: {
+                      fontWeight: 400,
+                      fontSize: '1rem',
+                      color: '#2C5EE8'
+                    },
+                  }}
+                />
               </Box>
             ) : (
               <TextField
@@ -475,6 +568,7 @@ function PostEditor() {
                 }}
               />
             )}
+
 
             {!isFirstBlock ? <IconButton onClick={() => removeContentBlock(index)}>
               <RemoveCircleOutlineIcon />
