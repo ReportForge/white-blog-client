@@ -2,42 +2,63 @@ import React, { useEffect } from 'react';
 import './App.css';
 import AppRouter from './AppRouter';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { jwtDecode } from 'jwt-decode';
 
 const theme = createTheme({
   // theme customization
 });
 
 function App() {
+
   useEffect(() => {
-    let timer;
-    const resetTimer = () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        // Alert the user about logout due to inactivity
+    let inactivityTimer;
+    let expirationTimer;
+
+    const resetInactivityTimer = () => {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
         alert('You have been logged out due to inactivity.');
-
-        // Clear user session data
         localStorage.clear();
-
-        // Refresh the page to reflect changes (e.g., redirect to login page or update UI)
         window.location.href = '/';
-      }, 1000 * 60 * 60); // 1 minute for demonstration, change to 30 minutes or as neede      
+      }, 1000 * 60 * 60); // 1 hour for inactivity, adjust as needed
     };
 
-    // Events that should reset the timer
-    window.addEventListener('mousemove', resetTimer);
-    window.addEventListener('keydown', resetTimer);
+    const checkTokenExpiration = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const { exp } = jwtDecode(token); // Use jwtDecode here
+        const now = new Date().getTime() / 1000; // Current time in seconds
 
-    // Start the timer
-    resetTimer();
+        // Set a timer to log out when the token expires
+        const delay = (exp - now) * 1000; // Time until token expiration in milliseconds
+        if (delay > 0) {
+          clearTimeout(expirationTimer);
+          expirationTimer = setTimeout(() => {
+            alert('Your session has expired. Please log in again.');
+            localStorage.clear();
+            window.location.href = '/';
+          }, delay);
+        }
+      }
+    };
+
+    // Events that should reset the inactivity timer
+    window.addEventListener('mousemove', resetInactivityTimer);
+    window.addEventListener('keydown', resetInactivityTimer);
+
+    // Start the timers
+    resetInactivityTimer();
+    checkTokenExpiration();
 
     // Cleanup on component unmount
     return () => {
-      clearTimeout(timer);
-      window.removeEventListener('mousemove', resetTimer);
-      window.removeEventListener('keydown', resetTimer);
+      clearTimeout(inactivityTimer);
+      clearTimeout(expirationTimer);
+      window.removeEventListener('mousemove', resetInactivityTimer);
+      window.removeEventListener('keydown', resetInactivityTimer);
     };
   }, []);
+
 
   return (
     <div className="App">

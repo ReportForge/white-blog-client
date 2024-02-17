@@ -71,7 +71,7 @@ function PostEditor() {
     }, 60000); // 60000 milliseconds = 1 minute
 
     return () => clearInterval(autoSaveInterval); // Cleanup interval on component unmount
-  }, [blogPost]); // Dependency array, auto-save will trigger when blogPost changes
+  }); // Dependency array, auto-save will trigger when blogPost changes
 
 
   const handleInputChange = (e, index, field, subField = null) => {
