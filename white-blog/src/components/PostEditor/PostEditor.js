@@ -318,6 +318,7 @@ function PostEditor() {
         Create Blog Post
       </Typography>
       <Box component="form" onSubmit={handleSubmit}>
+        {/* Title */}
         <Box sx={{ '& .MuiTextField-root': { marginBottom: '2rem' } }}>
           <TextField
             label="Title"
@@ -335,6 +336,7 @@ function PostEditor() {
             onChange={(e) => setBlogPost({ ...blogPost, title: e.target.value })}
           />
         </Box>
+        {/* subTitle */}
         <Box sx={{ '& .MuiTextField-root': { marginBottom: '2rem' } }}>
           <TextField
             label="Subtitle"

@@ -20,7 +20,7 @@ function App() {
         alert('You have been logged out due to inactivity.');
         localStorage.clear();
         window.location.href = '/';
-      }, 1000 * 60 * 60); // 1 hour for inactivity, adjust as needed
+      }, 1000 * 60 * 180); // 1 hour for inactivity, adjust as needed
     };
 
     const checkTokenExpiration = () => {

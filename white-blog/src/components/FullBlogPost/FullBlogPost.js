@@ -99,10 +99,15 @@ function FullBlogPost() {
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
+        const token = localStorage.getItem('token'); // Assuming you're storing the auth token in localStorage
         if (file) {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = async (e) => {
                 handleChange('mainImage', e.target.result);
+                await updateBlogPost(id, { 'mainImage': e.target.result }, token);
+                setBlogPost({ ...blogPost, 'mainImage': e.target.result });
+                setEditedFields({ ...editedFields, 'mainImage': undefined }); // Clear edited state for the field
+                setEditMode(false);
             };
             reader.readAsDataURL(file);
         }
@@ -173,7 +178,7 @@ function FullBlogPost() {
         <>
 
             <Container maxWidth="lg"> {/* First part with maxWidth "lg" */}
-                <Box marginTop='2rem'>{user.isEditor && <IconButton sx={{color:'#2c5ee8'}}  onClick={handleEditToggle}><EditIcon /></IconButton>}</Box>
+                <Box marginTop='2rem'>{user.isEditor && <IconButton sx={{ color: '#2c5ee8' }} onClick={handleEditToggle}><EditIcon /></IconButton>}</Box>
                 <Box sx={{ my: 4 }}>
                     {/* Title */}
                     {editMode ? (
@@ -184,6 +189,9 @@ function FullBlogPost() {
                                 label="Title"
                                 defaultValue={title}
                                 onChange={(e) => handleChange('title', e.target.value)}
+                                InputProps={{
+                                    style: { fontSize: '3rem', fontWeight: 700, fontFamily: "'Lato', sans-serif" },
+                                }}
                             />
                             <IconButton onClick={() => handleSave('title')}>
                                 <SaveIcon />
@@ -197,7 +205,8 @@ function FullBlogPost() {
                                 fontSize: !isMobile ? '4rem' : '2.7rem',
                                 fontWeight: 700,
                                 color: '#1E293B',
-                                textAlign: isMobile ? 'left' : null
+                                textAlign: isMobile ? 'left' : null,
+                                fontFamily: "'Lato', sans-serif"
                             }}>
                             {title}
 
@@ -210,8 +219,18 @@ function FullBlogPost() {
                                 fullWidth
                                 variant="outlined"
                                 label="Title"
-                                defaultValue={title}
+                                defaultValue={subTitle}
                                 onChange={(e) => handleChange('title', e.target.value)}
+                                InputProps={{
+                                    style: {
+                                        fontSize: !isMobile ? '1.5rem' : '1rem',
+                                        fontWeight: 400,
+                                        color: '#475569',
+                                        textAlign: isMobile ? 'left' : null,
+                                        marginBottom: '2rem',
+                                        fontFamily: "'Lato', sans-serif"
+                                    }
+                                }}
                             />
                             <IconButton onClick={() => handleSave('title')}>
                                 <SaveIcon />
@@ -226,7 +245,8 @@ function FullBlogPost() {
                                 fontWeight: 400,
                                 color: '#475569',
                                 textAlign: isMobile ? 'left' : null,
-                                marginBottom: '2rem'
+                                marginBottom: '2rem',
+                                fontFamily: "'Lato', sans-serif"
                             }}>
                             {subTitle}
 
@@ -255,15 +275,17 @@ function FullBlogPost() {
                             {readTime} minutes read
                         </Typography>
                     </Box>
+                    {/* mainImage */}
                     {editMode ? (
                         <>
                             <Typography variant="h6" gutterBottom>Change Main Image</Typography>
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                label="Image URL"
-                                defaultValue={mainImage}
-                            />
+                            <Box sx={{ width: '100%', overflow: 'hidden', position: 'relative', paddingTop: '56.25%' /* 16:9 Aspect Ratio */ }}>
+                                {blogPost.mainImage ? (
+                                    <img src={blogPost.mainImage} alt="Main" style={{ position: 'absolute', top: 0, left: 0, width: '960px', height: '540px', objectFit: 'cover' }} />
+                                ) : (
+                                    <Typography sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>Upload an Image</Typography>
+                                )}
+                            </Box>
                             <Box sx={{ mt: 2 }}>
                                 <Button component="label">
                                     Upload New Image
@@ -277,9 +299,6 @@ function FullBlogPost() {
                                     />
                                 </Button>
                             </Box>
-                            <IconButton sx={{ mt: 1 }} onClick={() => handleSave('mainImage')}>
-                                <SaveIcon />
-                            </IconButton>
                         </>
                     ) : (
                         mainImage && (
@@ -291,7 +310,7 @@ function FullBlogPost() {
                     )}
                 </Box>
             </Container>
-
+            {/* contentBlocks */}
             <Container maxWidth="md"> {/* Content blocks part with maxWidth "md" */}
                 <Typography variant="body1" component="div">
                     {contentBlocks.map((block, index) => {
@@ -302,6 +321,7 @@ function FullBlogPost() {
                                     <Box sx={{ display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
                                         <TextField
                                             fullWidth
+                                            key={block._id || index}
                                             variant="outlined"
                                             multiline
                                             minRows={3} // Adjust based on your preference
@@ -312,12 +332,14 @@ function FullBlogPost() {
                                                 updatedBlocks[index].content = e.target.value;
                                                 setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
                                             }}
-                                            sx={{
-                                                fontSize: !isMobile ? '1.2rem' : '1rem',
-                                                fontWeight: 400,
-                                                color: '#475569',
-                                                marginBottom: '2rem',
-                                                fontFamily: "'Lato', sans-serif",
+                                            InputProps={{
+                                                sx: {
+                                                    fontSize: !isMobile ? '1.2rem' : '1rem',
+                                                    fontWeight: 400,
+                                                    color: '#475569',
+                                                    marginBottom: '2rem',
+                                                    fontFamily: "'Lato', sans-serif",
+                                                }
                                             }}
                                         />
                                         <IconButton onClick={() => handleSave('contentBlocks')}>
@@ -337,7 +359,31 @@ function FullBlogPost() {
 
                                 </Typography>;
                             case 'image':
-                                return <CardMedia
+                                return editMode ? (
+                                    <>
+                                        <Typography key={block._id || index} variant="h6" gutterBottom>Change Main Image</Typography>
+                                        <Box sx={{ width: '100%', overflow: 'hidden', position: 'relative', paddingTop: '56.25%' /* 16:9 Aspect Ratio */ }}>
+                                            {block.content ? (
+                                                <img src={block.content} alt="Main" style={{ position: 'absolute', top: 0, left: 0, width: '960px', height: '540px', objectFit: 'cover' }} />
+                                            ) : (
+                                                <Typography sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>Upload an Image</Typography>
+                                            )}
+                                        </Box>
+                                        <Box sx={{ mt: 2 }}>
+                                            <Button component="label">
+                                                Upload New Image
+                                                <input
+                                                    accept="image/*"
+                                                    type="file"
+                                                    hidden
+                                                    onChange={handleImageUpload}
+                                                    style={{ display: 'none' }}
+                                                    id="image-upload"
+                                                />
+                                            </Button>
+                                        </Box>
+                                    </>
+                                ) : <CardMedia
                                     component="img"
                                     onClick={() => handleOpenModal(block.content)}
                                     src={block.content}
@@ -357,6 +403,7 @@ function FullBlogPost() {
                                     <Box sx={{ display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
                                         <TextField
                                             fullWidth
+                                            key={block._id || index}
                                             variant="outlined"
                                             multiline
                                             minRows={3} // Adjust based on your preference
@@ -367,12 +414,15 @@ function FullBlogPost() {
                                                 updatedBlocks[index].content = e.target.value;
                                                 setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
                                             }}
-                                            sx={{
-                                                fontSize: !isMobile ? '1.2rem' : '1rem',
-                                                fontWeight: 400,
-                                                color: '#475569',
-                                                marginBottom: '2rem',
-                                                fontFamily: "'Lato', sans-serif",
+                                            InputProps={{
+                                                sx: {
+                                                    fontSize: !isMobile ? '1.3rem' : '1rem',
+                                                    fontWeight: 700,
+                                                    marginBottom: '1rem',
+                                                    textAlign: 'left',
+                                                    fontFamily: "'Lato', sans-serif",
+                                                    color: '#374151'
+                                                }
                                             }}
                                         />
                                         <IconButton onClick={() => handleSave('contentBlocks')}>
@@ -401,6 +451,7 @@ function FullBlogPost() {
                                     <Box sx={{ display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
                                         <TextField
                                             fullWidth
+                                            key={block._id || index}
                                             variant="outlined"
                                             multiline
                                             minRows={3} // Adjust based on your preference
@@ -411,12 +462,15 @@ function FullBlogPost() {
                                                 updatedBlocks[index].content = e.target.value;
                                                 setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
                                             }}
-                                            sx={{
-                                                fontSize: !isMobile ? '1.2rem' : '1rem',
-                                                fontWeight: 400,
-                                                color: '#475569',
-                                                marginBottom: '2rem',
-                                                fontFamily: "'Lato', sans-serif",
+                                            inputProps={{
+                                                style: {
+                                                    fontSize: !isMobile ? '2rem' : '1.5rem',
+                                                    fontWeight: 700,
+                                                    marginBottom: '1rem',
+                                                    textAlign: 'left',
+                                                    fontFamily: "'Lato', sans-serif",
+                                                    color: '#374151'
+                                                }
                                             }}
                                         />
                                         <IconButton onClick={() => handleSave('contentBlocks')}>
@@ -443,11 +497,25 @@ function FullBlogPost() {
                             // Inside the switch statement in your contentBlocks.map
                             case 'bullet':
                                 return editMode ? (
-                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
+                                    <Box key={block._id || index} sx={{
+                                        display: 'flex',
+                                        alignItems: 'flex-start',
+                                        marginBottom: '0.5rem',
+                                        '&:before': {
+                                            content: '"•"', // Bullet point character
+                                            display: 'inline-block',
+                                            marginRight: '8px', // Space between bullet and text
+                                            color: '#2C5EE8', // Example: change bullet point color
+                                            fontWeight: 'bold', // Example: make bullet point bold
+                                            fontSize: '1.3rem', // // Bullet size, adjust as needed
+                                            lineHeight: 'inherit', // Align bullet with text
+                                        }
+                                    }}>
                                         <TextField
                                             fullWidth
                                             variant="outlined"
                                             multiline
+                                            key={block._id || index}
                                             minRows={3} // Adjust based on your preference
                                             defaultValue={block.content}
                                             onChange={(e) => {
@@ -456,12 +524,14 @@ function FullBlogPost() {
                                                 updatedBlocks[index].content = e.target.value;
                                                 setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
                                             }}
-                                            sx={{
-                                                fontSize: !isMobile ? '1.2rem' : '1rem',
-                                                fontWeight: 400,
-                                                color: '#475569',
-                                                marginBottom: '2rem',
-                                                fontFamily: "'Lato', sans-serif",
+                                            inputProps={{
+                                                sx: {
+                                                    fontSize: !isMobile ? '1.2rem' : '1rem',
+                                                    fontWeight: 400,
+                                                    color: '#475569',
+                                                    textAlign: 'left',
+                                                    fontFamily: "'Lato', sans-serif"
+                                                }
                                             }}
                                         />
                                         <IconButton onClick={() => handleSave('contentBlocks')}>
@@ -500,6 +570,7 @@ function FullBlogPost() {
                                     <Box sx={{ display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
                                         <TextField
                                             fullWidth
+                                            key={block._id || index}
                                             variant="outlined"
                                             multiline
                                             minRows={3} // Adjust based on your preference
@@ -510,12 +581,18 @@ function FullBlogPost() {
                                                 updatedBlocks[index].content = e.target.value;
                                                 setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
                                             }}
-                                            sx={{
-                                                fontSize: !isMobile ? '1.2rem' : '1rem',
-                                                fontWeight: 400,
-                                                color: '#475569',
-                                                marginBottom: '2rem',
-                                                fontFamily: "'Lato', sans-serif",
+                                            inputProps={{
+                                                sx: {
+                                                    backgroundColor: '#F3F5FD',
+                                                    color: '#3C6AEA',
+                                                    padding: '16px',
+                                                    borderRadius: '8px',
+                                                    fontFamily: 'monospace',
+                                                    fontSize: !isMobile ? '1rem' : '0.875rem',
+                                                    whiteSpace: 'pre-wrap', // To ensure the script respects newline characters
+                                                    marginBottom: '2rem',
+                                                    overflowX: 'auto', // In case the script is wider than the container
+                                                }
                                             }}
                                         />
                                         <IconButton onClick={() => handleSave('contentBlocks')}>
@@ -597,7 +674,7 @@ function FullBlogPost() {
                 </Box>
             </Modal>
             {/* Conditionally render ToC */}
-            {!isMobileOrMedium && (
+            {!isMobileOrMedium && !editMode ? (
                 <Box id="toc" sx={{ width: 200, maxHeight: '60vh', overflowY: 'auto', textAlign: 'left', marginLeft: '5rem', marginTop: '6rem', fontFamily: "'Lato', sans-serif" }}>
                     <Typography sx={{ color: '#64748B', textAlign: 'left', mr: '1.1rem', fontWeight: 600, mb: '1rem' }}>Contents</Typography>
                     {titlesForToC.map((title, index) => (
@@ -619,7 +696,7 @@ function FullBlogPost() {
                         </Typography>
                     ))}
                 </Box>
-            )}
+            ):(null)}
         </>
     );
 }
