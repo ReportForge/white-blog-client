@@ -68,7 +68,7 @@ function PostEditor() {
   useEffect(() => {
     const autoSaveInterval = setInterval(() => {
       saveDraftWithoutNavigate();
-    }, 60000); // 60000 milliseconds = 1 minute
+    }, 30000); // 60000 milliseconds = 1 minute
 
     return () => clearInterval(autoSaveInterval); // Cleanup interval on component unmount
   }); // Dependency array, auto-save will trigger when blogPost changes
@@ -113,7 +113,7 @@ function PostEditor() {
     }
 
     try {
-      const draftData = { ...blogPost, userId: JSON.parse(user).id }; // Assuming your user object has an id field
+      const draftData = { ...blogPost, userId: JSON.parse(user).id };
       await saveDraftBlogPost(draftData, token);
       navigate('/'); // Redirect to home after saving the draft
     } catch (error) {
@@ -126,8 +126,7 @@ function PostEditor() {
     const user = localStorage.getItem('user');
     const token = localStorage.getItem('token');
     if (!blogPost.title.trim()) {
-      setIsTitleInvalid(true);
-      titleRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setBlogPost({ ...blogPost, title: 'Draft' })
       return; // Prevent the form submission
     }
 
@@ -138,7 +137,7 @@ function PostEditor() {
     }
 
     try {
-      const draftData = { ...blogPost, userId: JSON.parse(user).id }; // Assuming your user object has an id field
+      const draftData = { ...blogPost, userId: JSON.parse(user).id };
       await saveDraftBlogPost(draftData, token);
     } catch (error) {
       console.error('Error saving draft:', error.message);
