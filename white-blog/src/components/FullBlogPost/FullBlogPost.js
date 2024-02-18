@@ -113,9 +113,43 @@ function FullBlogPost() {
         }
     };
 
+    const handleContentBlockImageUpload = (e, index) => {
+        const file = e.target.files[0];
+        const token = localStorage.getItem('token'); // Assuming you're storing the auth token in localStorage
+    
+        if (file) {
+            // Ideally, you should upload the file to your server or a cloud storage service to get a URL.
+            // For demonstration, we'll use FileReader to simulate this process.
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                // Simulated upload: In a real app, replace this with an actual upload function,
+                // and use the URL from the server/cloud storage instead of `e.target.result`.
+                const imageUrl = e.target.result; // This should be the URL from your upload function
+    
+                // Update the specific content block with the new image URL
+                const updatedBlocks = [...contentBlocks];
+                updatedBlocks[index].content = imageUrl;
+    
+                // Update the edited fields and the local state
+                setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
+    
+                // Optionally, you can save the blog post immediately after updating the image
+                // or you can let the user manually trigger the save for all changes at once
+                await updateBlogPost(id, { contentBlocks: updatedBlocks }, token);
+                setBlogPost({ ...blogPost, contentBlocks: updatedBlocks });
+                setEditedFields({ ...editedFields, contentBlocks: undefined }); // Clear edited state for the field
+                setEditMode(false);
+            };
+    
+            reader.readAsDataURL(file); // This is just for simulation; replace with actual upload logic
+        }
+    };
+    
+
     if (!blogPost) {
         return <Box
             display="flex"
+            key={'loading'}
             justifyContent="center"
             alignItems="center"
             minHeight="100vh" // Adjust the height as needed
@@ -376,7 +410,7 @@ function FullBlogPost() {
                                                     accept="image/*"
                                                     type="file"
                                                     hidden
-                                                    onChange={handleImageUpload}
+                                                    onChange={(e) => handleContentBlockImageUpload(e, index)}
                                                     style={{ display: 'none' }}
                                                     id="image-upload"
                                                 />
