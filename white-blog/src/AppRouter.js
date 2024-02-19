@@ -7,6 +7,7 @@ import SignUp from './components/SignUp/SignUp';
 import UserManagement from './components/UserManagement/UserManagement';
 import PostEditor from './components/PostEditor/PostEditor';
 import FullBlogPost from './components/FullBlogPost/FullBlogPost';
+import Profile from './components/Profile/Profile';
 
 function AppRouter() {
   return (
@@ -18,6 +19,7 @@ function AppRouter() {
         <Route path="/user-management" element={<NavigationWarp><UserManagement /></NavigationWarp>} />
         <Route path="/post-editor" element={<NavigationWarp><PostEditor /></NavigationWarp>} />
         <Route path="/full-blog-post/:id" element={<NavigationWarp><FullBlogPost /></NavigationWarp>} />
+        <Route path="/profile" element={<NavigationWarp><Profile /></NavigationWarp>}/>
       </Routes>
     </BrowserRouter>
   );

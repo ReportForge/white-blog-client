@@ -1,13 +1,11 @@
 import React from 'react';
 import NavigationBar from '../HomePage/NavigationBar/NavigationBar';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
 const NavigationWarp = ({ children }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <>

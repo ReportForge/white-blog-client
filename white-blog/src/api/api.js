@@ -163,3 +163,18 @@ export const updateBlogPost = async (postId, postData, token) => {
     throw error.response.data; // Error handling
   }
 };
+
+// Function to update a user's profile, including the profile picture
+export const updateUserProfile = async (userId, profileData, token) => {
+  try {
+    const response = await axiosInstance.put(`/api/users/${userId}`, profileData, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Include the auth token in the request headers
+      },
+    });
+    return response.data; // The updated user profile data
+  } catch (error) {
+    throw error.response.data; // Error handling
+  }
+};
+

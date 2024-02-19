@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography, Avatar, Box, Grid } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Avatar, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 function MiniBlogPost({ post }) {

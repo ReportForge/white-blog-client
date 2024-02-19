@@ -7,6 +7,8 @@ import { makeStyles } from '@mui/styles';
 import Logo from '../../../assets/images/logo.png';
 import { useNavigate } from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,7 +56,7 @@ const NavigationBar = () => {
             variant="h6"
             className={classes.title}
           >
-            <img src={Logo} alt="Logo" className={classes.logo} onClick={goHome}/>
+            <img src={Logo} alt="Logo" className={classes.logo} onClick={goHome} />
           </Typography>
           {!isLoggedIn ? (
             <Button
@@ -75,6 +77,12 @@ const NavigationBar = () => {
             </Button>
           ) : (
             <>
+              <IconButton onClick={() => navigate("/profile")} sx={{ marginRight: theme.spacing(2) }}>
+                <Avatar
+                  alt="Profile Picture"
+                  src={user.profilePicture || "path/to/your/default/avatar/image.png"} // Replace with your default avatar path
+                />
+              </IconButton>
               <Button
                 variant="contained"
                 style={{ fontFamily: "'Lato', sans-serif", marginRight: '10px' }}
