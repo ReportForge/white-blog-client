@@ -624,7 +624,6 @@ function FullBlogPost() {
                                                     whiteSpace: 'pre-wrap', // To ensure the script respects newline characters
                                                     marginBottom: '2rem',
                                                     overflowX: 'auto', // In case the script is wider than the container
-                                                    fontFamily: "'Lato', sans-serif",
                                                 }
                                             }}
                                         />
@@ -645,7 +644,6 @@ function FullBlogPost() {
                                             whiteSpace: 'pre-wrap', // To ensure the script respects newline characters
                                             marginBottom: '2rem',
                                             overflowX: 'auto', // In case the script is wider than the container
-                                            fontFamily: "'Lato', sans-serif",
                                         }}
                                     >
                                         {block.content}
