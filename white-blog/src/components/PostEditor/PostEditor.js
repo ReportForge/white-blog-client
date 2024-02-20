@@ -450,7 +450,7 @@ function PostEditor() {
             id="image-upload"
           />
           <label htmlFor="image-upload">
-            <Button variant="contained" component="span">
+            <Button variant="contained" component="span" sx={{ backgroundColor: '#416EEA', '&:hover': { backgroundColor: '#365FBE' } }}>
               Upload
             </Button>
           </label>
@@ -585,11 +585,11 @@ function PostEditor() {
         <Button type="button" variant="outlined" sx={{ mt: 3, mb: 2, mr: 2 }} onClick={saveDraft}>
           Save for Now
         </Button>
-        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: '#416EEA', '&:hover': { backgroundColor: '#365FBE' } }} >
           Create Post
         </Button>
-      </Box>
-    </Container>
+    </Box>
+    </Container >
   );
 }
 

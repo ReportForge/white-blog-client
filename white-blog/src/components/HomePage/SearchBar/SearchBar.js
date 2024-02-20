@@ -80,7 +80,7 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
   }, [initialTag]);
 
   // Array of tag strings
-  const tags = ['All','News', 'Product', 'Research', 'Security','Public Sector'];
+  const tags = ['All', 'News', 'Product', 'Research', 'Security', 'Public Sector'];
 
   const handleButtonClick = (tag) => {
     setSelectedTag(tag === 'All' ? null : tag);
@@ -107,11 +107,12 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
                   borderRadius: '20px',
                   fontSize: '11px',
                   marginLeft: '10px',
+                  fontFamily: "'Lato', sans-serif",
                   marginTop: isMobile ? theme.spacing(1) : theme.spacing(0.5),
                   backgroundColor: activeTag === tag ? '#204EB7' : '#f0f3f7',
                   color: activeTag === tag ? '#ffffff' : '#85909D',
                   '&:hover': {
-                    backgroundColor: activeTag === tag ?  '#204EB7' : '#f0f3f7',
+                    backgroundColor: activeTag === tag ? '#204EB7' : '#f0f3f7',
                   },
                 }}
                   variant="contained"
@@ -126,6 +127,11 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
             variant="outlined"
             placeholder="Search..."
             onChange={handleSearchChange}
+            sx={{
+              '& .MuiInputBase-input::placeholder': {
+                fontFamily: "'Lato', sans-serif", // Apply Lato font here for placeholder
+              },
+            }}
             InputProps={{
               style: {
                 backgroundColor: '#f0f3f7',
@@ -133,6 +139,7 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
                 borderRadius: '20px',
                 fontSize: '14px',
                 height: '40px',
+                fontFamily: "'Lato', sans-serif",
               },
               endAdornment: (
                 <InputAdornment position="end">

@@ -178,3 +178,14 @@ export const updateUserProfile = async (userId, profileData, token) => {
   }
 };
 
+// Function to verify the user's email with a verification code
+export const verifyEmailCode = async (verificationData) => {
+  try {
+    const response = await axiosInstance.post('/api/auth/verify-email', verificationData);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+

@@ -5,7 +5,19 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { jwtDecode } from 'jwt-decode';
 
 const theme = createTheme({
-  // theme customization
+  typography: {
+    fontFamily: "'Lato', sans-serif",
+  },
+  components: {
+    // This will ensure all text fields also use the Lato font
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          fontFamily: "'Lato', sans-serif",
+        },
+      },
+    },
+  },
 });
 
 function App() {

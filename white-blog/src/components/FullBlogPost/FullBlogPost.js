@@ -624,6 +624,7 @@ function FullBlogPost() {
                                                     whiteSpace: 'pre-wrap', // To ensure the script respects newline characters
                                                     marginBottom: '2rem',
                                                     overflowX: 'auto', // In case the script is wider than the container
+                                                    fontFamily: "'Lato', sans-serif",
                                                 }
                                             }}
                                         />
@@ -644,6 +645,7 @@ function FullBlogPost() {
                                             whiteSpace: 'pre-wrap', // To ensure the script respects newline characters
                                             marginBottom: '2rem',
                                             overflowX: 'auto', // In case the script is wider than the container
+                                            fontFamily: "'Lato', sans-serif",
                                         }}
                                     >
                                         {block.content}
@@ -717,10 +719,11 @@ function FullBlogPost() {
                                 color: activeSection === title.id ? '#0f172a' : '#8D919A', // Change color if active
                                 fontSize: '0.8rem',
                                 cursor: 'pointer',
+                                fontFamily: "'Lato', sans-serif",
                                 mb: 2,
                                 pl: '5px', // Add space for the blue line
                                 borderLeft: activeSection === title.id ? '3px solid blue' : 'none', // Add blue line if active
-                                ...(title.type === 'bigTitle' ? { fontWeight: 'bold' } : {})
+                                ...(title.type === 'bigTitle' ? { fontWeight: 800 } : {})
                             }}
                             onClick={() => scrollToSection(title.id)}
                         >
