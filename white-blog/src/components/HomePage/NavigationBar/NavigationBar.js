@@ -77,10 +77,13 @@ const NavigationBar = () => {
             </Button>
           ) : (
             <>
-              <IconButton onClick={() => navigate("/profile")} sx={{ marginRight: theme.spacing(2) }}>
+              <IconButton onClick={() => navigate("/profile")}
+                sx={{
+                  marginRight: theme.spacing(2)
+                }}>
                 <Avatar
                   alt="Profile Picture"
-                  src={user.profilePicture || "path/to/your/default/avatar/image.png"} // Replace with your default avatar path
+                  src={user.profilePicture}
                 />
               </IconButton>
               <Button
@@ -99,7 +102,7 @@ const NavigationBar = () => {
               >
                 Log Out
               </Button>
-              {user.email === "danelyehuda@gmail.com" && (
+              {user.email === "danelyehuda1998@gmail.com" && (
                 <Button
                   variant="contained"
                   style={{ fontFamily: "'Lato', sans-serif" }}

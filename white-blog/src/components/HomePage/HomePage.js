@@ -1,4 +1,4 @@
-import { React, useState,useEffect } from 'react';
+import { React, useState, useEffect } from 'react';
 import Container from '@mui/material/Container';
 import NavigationBar from './NavigationBar/NavigationBar';
 import SearchBar from './SearchBar/SearchBar';

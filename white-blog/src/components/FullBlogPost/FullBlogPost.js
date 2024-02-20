@@ -312,7 +312,6 @@ function FullBlogPost() {
                     {/* mainImage */}
                     {editMode ? (
                         <>
-                            <Typography variant="h6" gutterBottom>Change Main Image</Typography>
                             <Box sx={{ width: '100%', overflow: 'hidden', position: 'relative', paddingTop: '56.25%' /* 16:9 Aspect Ratio */ }}>
                                 {blogPost.mainImage ? (
                                     <img src={blogPost.mainImage} alt="Main" style={{ position: 'absolute', top: 0, left: 0, width: '960px', height: '540px', objectFit: 'cover' }} />
@@ -395,7 +394,6 @@ function FullBlogPost() {
                             case 'image':
                                 return editMode ? (
                                     <>
-                                        <Typography key={block._id || index} variant="h6" gutterBottom>Change Main Image</Typography>
                                         <Box sx={{ width: '100%', overflow: 'hidden', position: 'relative', paddingTop: '56.25%' /* 16:9 Aspect Ratio */ }}>
                                             {block.content ? (
                                                 <img src={block.content} alt="Main" style={{ position: 'absolute', top: 0, left: 0, width: '960px', height: '540px', objectFit: 'cover' }} />

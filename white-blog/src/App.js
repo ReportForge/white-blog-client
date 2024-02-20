@@ -20,13 +20,13 @@ function App() {
         alert('You have been logged out due to inactivity.');
         localStorage.clear();
         window.location.href = '/';
-      }, 1000 * 60 * 180); // 1 hour for inactivity, adjust as needed
+      }, 1000 * 60 * 120); // 2 hours
     };
 
     const checkTokenExpiration = () => {
       const token = localStorage.getItem('token');
       if (token) {
-        const { exp } = jwtDecode(token); // Use jwtDecode here
+        const { exp } = jwtDecode(token);
         const now = new Date().getTime() / 1000; // Current time in seconds
 
         // Set a timer to log out when the token expires
@@ -42,9 +42,9 @@ function App() {
       }
     };
 
-    // Events that should reset the inactivity timer
-    window.addEventListener('mousemove', resetInactivityTimer);
-    window.addEventListener('keydown', resetInactivityTimer);
+    // // Events that should reset the inactivity timer
+    // window.addEventListener('mousemove', resetInactivityTimer);
+    // window.addEventListener('keydown', resetInactivityTimer);
 
     // Start the timers
     resetInactivityTimer();
@@ -54,8 +54,8 @@ function App() {
     return () => {
       clearTimeout(inactivityTimer);
       clearTimeout(expirationTimer);
-      window.removeEventListener('mousemove', resetInactivityTimer);
-      window.removeEventListener('keydown', resetInactivityTimer);
+      // window.removeEventListener('mousemove', resetInactivityTimer);
+      // window.removeEventListener('keydown', resetInactivityTimer);
     };
   }, []);
 
