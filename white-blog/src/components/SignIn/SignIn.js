@@ -135,7 +135,7 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2" style={{ fontFamily: "'Lato', sans-serif" }}>
+                <Link href="/password-reset" variant="body2" style={{ fontFamily: "'Lato', sans-serif" }}>
                   Forgot password?
                 </Link>
               </Grid>

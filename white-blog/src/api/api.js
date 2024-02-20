@@ -188,4 +188,22 @@ export const verifyEmailCode = async (verificationData) => {
   }
 };
 
+// Function to request a password reset
+export const requestPasswordReset = async (email) => {
+  try {
+    const response = await axiosInstance.post('/api/users/request-password-reset', { email });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 
+// Function to submit a new password after a reset request
+export const submitNewPassword = async ({ token, newPassword }) => {
+  try {
+    const response = await axiosInstance.post('/api/users/submit-new-password', { token, newPassword });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};

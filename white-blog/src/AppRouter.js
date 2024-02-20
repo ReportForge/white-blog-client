@@ -8,6 +8,8 @@ import UserManagement from './components/UserManagement/UserManagement';
 import PostEditor from './components/PostEditor/PostEditor';
 import FullBlogPost from './components/FullBlogPost/FullBlogPost';
 import Profile from './components/Profile/Profile';
+import PasswordResetSubmit from './components/PasswordResetSubmit/PasswordResetSubmit';
+import PasswordReset from './components/PasswordReset/PasswordReset';
 
 function AppRouter() {
   return (
@@ -20,6 +22,9 @@ function AppRouter() {
         <Route path="/post-editor" element={<NavigationWarp><PostEditor /></NavigationWarp>} />
         <Route path="/full-blog-post/:id" element={<NavigationWarp><FullBlogPost /></NavigationWarp>} />
         <Route path="/profile" element={<NavigationWarp><Profile /></NavigationWarp>}/>
+        <Route path="/password-reset" element={<PasswordReset />} />
+        <Route path="/password-reset/:token" element={<PasswordResetSubmit />} />
+
       </Routes>
     </BrowserRouter>
   );
