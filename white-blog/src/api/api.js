@@ -207,3 +207,18 @@ export const submitNewPassword = async ({ token, newPassword }) => {
     throw error.response.data;
   }
 };
+
+// Function to like or unlike a blog post
+export const likeBlogPost = async (postId, token) => {
+  try {
+    const response = await axiosInstance.put('/api/posts/like', { postId }, { // Note the endpoint change and body inclusion
+      headers: {
+        'Authorization': `Bearer ${token}`, // Include the auth token in the request headers
+      },
+    });
+    return response.data; // The updated post data, including new like status and count
+  } catch (error) {
+    throw error.response.data; // Error handling
+  }
+};
+
