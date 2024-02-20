@@ -79,7 +79,7 @@ const NavigationBar = () => {
             <>
               <IconButton onClick={() => navigate("/profile")}
                 sx={{
-                  marginRight: theme.spacing(2)
+                  marginRight: theme.spacing(2),
                 }}>
                 <Avatar
                   alt="Profile Picture"
@@ -88,9 +88,10 @@ const NavigationBar = () => {
               </IconButton>
               <Button
                 variant="contained"
-                style={{ fontFamily: "'Lato', sans-serif", marginRight: '10px' }}
                 onClick={handleLogout}
                 sx={{
+                  fontFamily: "'Lato', sans-serif",
+                  marginRight: '10px',
                   height: theme.spacing(4),
                   borderRadius: theme.spacing(2),
                   backgroundColor: '#2C5EE8',
@@ -105,13 +106,17 @@ const NavigationBar = () => {
               {user.email === "danelyehuda1998@gmail.com" && (
                 <Button
                   variant="contained"
-                  style={{ fontFamily: "'Lato', sans-serif" }}
                   onClick={handleUserManagement}
                   sx={{
+                    fontFamily: "'Lato', sans-serif",
                     height: theme.spacing(4),
                     borderRadius: theme.spacing(2),
                     backgroundColor: '#FFA500', // Different color for emphasis
                     color: 'white',
+                    '@media (max-width: 600px)': {
+                      fontSize: '0.75rem', // Smaller font size on small screens
+                      padding: '4px 8px', // Reduced padding on small screens
+                    },
                     '&:hover': {
                       backgroundColor: '#cc8400',
                     },

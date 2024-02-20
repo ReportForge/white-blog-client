@@ -40,13 +40,13 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -63,7 +63,12 @@ export default function SignIn() {
       // Redirect the user or update UI upon successful sign-in
     } catch (error) {
       console.error('Error during sign-in:', error);
-      // Handle errors, e.g., show an error message to the user
+      if (error.message == 'User not found!') {
+        setEmailError('Email not found');
+      }
+      if (error.message == 'Invalid credentials!') {
+        setPasswordError('Invalid password');
+      }
     }
   };
 
@@ -98,7 +103,12 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
-              onChange={(e) => setEmail(e.target.value)}
+              error={!!emailError}
+              helperText={emailError}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (!e.target.value.trim()) setEmailError(''); // Clear email error when the field is empty
+              }}
               InputLabelProps={{
                 style: { fontFamily: "'Lato', sans-serif" },
               }}
@@ -114,8 +124,13 @@ export default function SignIn() {
               label="Password"
               type="password"
               id="password"
+              error={!!passwordError}
+              helperText={passwordError}
               autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value)
+                if(e.target.value.trim()) setPasswordError('');
+              }}
               InputLabelProps={{
                 style: { fontFamily: "'Lato', sans-serif" },
               }}
