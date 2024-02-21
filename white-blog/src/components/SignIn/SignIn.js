@@ -63,10 +63,10 @@ export default function SignIn() {
       // Redirect the user or update UI upon successful sign-in
     } catch (error) {
       console.error('Error during sign-in:', error);
-      if (error.message == 'User not found!') {
+      if (error.message === 'User not found!') {
         setEmailError('Email not found');
       }
-      if (error.message == 'Invalid credentials!') {
+      if (error.message === 'Invalid credentials!') {
         setPasswordError('Invalid password');
       }
     }

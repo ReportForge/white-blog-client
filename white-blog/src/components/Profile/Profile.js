@@ -29,13 +29,13 @@ const Profile = () => {
         if (user._id) {
             getLikedPosts();
         }
-    }, [token]);
+    }, [token, user._id]);
 
     // Fetch user's posts
     useEffect(() => {
         const getUserPosts = async () => {
             try {
-                const posts = await fetchPostsByAuthorName(user.firstName, user.lastName,token);
+                const posts = await fetchPostsByAuthorName(user.firstName, user.lastName, token);
                 setUserPosts(posts);
             } catch (error) {
                 console.error('Failed to fetch user posts:', error);
@@ -45,7 +45,7 @@ const Profile = () => {
         if (user._id) {
             getUserPosts();
         }
-    }, [token]);
+    }, [token, user._id, user.firstName, user.lastName]);
 
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
@@ -158,7 +158,7 @@ const Profile = () => {
             <Typography variant="h5" mt='2rem' mb='2rem'>Liked Posts</Typography>
             <BlogPostsGrid posts={likedPosts} />
             <Typography variant="h5" mt='2rem' mb='2rem'>Your Posts</Typography>
-            {userPosts==[] ? <BlogPostsGrid posts={userPosts} /> : <Typography variant="h7" mt='2rem' mb='2rem'>No Posts Yet</Typography>}
+            {userPosts.length > 0 ? <BlogPostsGrid posts={userPosts} /> : <Typography variant="h7" mt='2rem' mb='2rem'>No Posts Yet</Typography>}
         </Container>
     );
 };
