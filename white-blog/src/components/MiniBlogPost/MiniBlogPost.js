@@ -2,16 +2,23 @@ import React from 'react';
 import { Card, CardContent, CardMedia, Typography, Avatar, Box, IconButton } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { likeBlogPost } from '../../api/api';
 
 function MiniBlogPost({ post }) {
-    const { _id, title, subTitle, authors, publishDate, mainImage } = post;
+    const { _id, title, subTitle, authors, publishDate, mainImage, likes } = post;
     const [liked, setLiked] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        // Set liked to true if the current user's ID is in the post's likes array
+        if (likes && likes.includes(user._id)) {
+            setLiked(true);
+        }
+    }, [likes, user._id]); // Depend on likes and user._id to re-run this effect if they change
 
     // Function to handle navigation
     const handleNavigate = () => {

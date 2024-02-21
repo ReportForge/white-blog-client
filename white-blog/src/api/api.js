@@ -222,3 +222,18 @@ export const likeBlogPost = async (postId, token) => {
   }
 };
 
+// Function to fetch liked posts for a specific user
+export const fetchLikedPosts = async (token) => {
+  try {
+    const response = await axiosInstance.get(`/api/posts/liked/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+

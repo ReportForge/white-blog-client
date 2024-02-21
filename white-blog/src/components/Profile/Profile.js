@@ -1,17 +1,34 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Container, Box, Typography, Grid, Avatar, IconButton, Paper, TextField } from '@mui/material';
+import { Container, Box, Typography, Grid, Avatar, IconButton, Paper, TextField, CircularProgress } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { updateUserProfile } from '../../api/api';
+import { updateUserProfile, fetchLikedPosts } from '../../api/api';
+import MiniBlogPost from '../MiniBlogPost/MiniBlogPost'
 
 const Profile = () => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
     const [profilePicture, setProfilePicture] = useState(user.profilePicture);
+    const [likedPosts, setLikedPosts] = useState([]);
     const fileInputRef = useRef(null);
     const token = localStorage.getItem('token');
 
     useEffect(() => {
         setProfilePicture(user.profilePicture); // Update state when user's profile picture changes
     }, [user.profilePicture]);
+
+    useEffect(() => {
+        const getLikedPosts = async () => {
+            try {
+                const posts = await fetchLikedPosts(token);
+                setLikedPosts(posts);
+            } catch (error) {
+                console.error('Failed to fetch liked posts:', error);
+            }
+        };
+
+        if (user._id) {
+            getLikedPosts();
+        }
+    }, [token]);
 
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
@@ -33,6 +50,25 @@ const Profile = () => {
     const triggerFileInput = () => {
         fileInputRef.current.click();
     };
+
+    function BlogPostsGrid({ posts }) {
+        if (!posts.length) {
+            return <CircularProgress
+                size={60}
+                style={{ color: '#204EB7' }}
+            />;
+        }
+
+        return (
+            <Grid container spacing={4}>
+                {posts.map((post, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                        <MiniBlogPost post={post} />
+                    </Grid>
+                ))}
+            </Grid>
+        );
+    }
 
     return (
         <Container maxWidth="lg">
@@ -102,6 +138,8 @@ const Profile = () => {
                     </Grid>
                 </Grid>
             </Paper>
+            <Typography variant="h5" mt='2rem' mb='2rem'>Liked Posts</Typography>
+            <BlogPostsGrid posts={likedPosts} />
         </Container>
     );
 };
