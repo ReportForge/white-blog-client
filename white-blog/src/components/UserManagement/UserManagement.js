@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAllUsers, setUserAsEditor, removeEditorStatus } from '../../api/api'; // Adjust the import path according to your file structure
-import { Table, TableBody, TableCell, TableHead, TableRow, Switch, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, Switch, Typography,Container } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
@@ -53,42 +53,44 @@ const UserManagement = () => {
 
     return (
         <>
-            <Typography variant="h3"
-                component="h1"
-                gutterBottom
-                style={{
-                    fontSize: !isMobile ? '4rem' : '2.7rem',
-                    fontWeight: 700,
-                    color: '#1E293B',
-                    textAlign: 'left',
-                    marginTop: '3rem',
-                    marginLeft: '2rem'
-                }}>
-                Users
-            </Typography>
-            <Table sx={{border: '3px solid #e0e0e0',borderRadius: theme.shape.borderRadius}}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>Full Name</TableCell>
-                        <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>Email</TableCell>
-                        <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>Editor</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {users.map((user) => (
-                        <TableRow key={user._id}>
-                            <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>{user.firstName} {user.lastName}</TableCell>
-                            <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>{user.email}</TableCell>
-                            <TableCell>
-                                <Switch
-                                    checked={user.isEditor}
-                                    onChange={(event) => handleEditorChange(user._id, event.target.checked)}
-                                />
-                            </TableCell>
+            <Container maxWidth={isMobile ? 'xs' : 'lg'}>
+                <Typography variant="h3"
+                    component="h1"
+                    gutterBottom
+                    style={{
+                        fontSize: !isMobile ? '4rem' : '2.7rem',
+                        fontWeight: 700,
+                        color: '#1E293B',
+                        textAlign: 'left',
+                        marginTop: '3rem',
+                        marginLeft: '2rem'
+                    }}>
+                    Users
+                </Typography>
+                <Table sx={{ border: '3px solid #e0e0e0', borderRadius: theme.shape.borderRadius }}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>Full Name</TableCell>
+                            <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>Email</TableCell>
+                            <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>Editor</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {users.map((user) => (
+                            <TableRow key={user._id}>
+                                <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>{user.firstName} {user.lastName}</TableCell>
+                                <TableCell style={{ fontFamily: "'Lato', sans-serif" }}>{user.email}</TableCell>
+                                <TableCell>
+                                    <Switch
+                                        checked={user.isEditor}
+                                        onChange={(event) => handleEditorChange(user._id, event.target.checked)}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </Container>
         </>
     );
 };

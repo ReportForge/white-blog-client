@@ -20,11 +20,19 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { createBlogPost, saveDraftBlogPost, fetchDraftBlogPost, deleteDraftBlogPost } from '../../api/api';
 import { useNavigate } from 'react-router-dom';
 
+const formatName = (firstName, lastName) => {
+  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  return `${capitalize(firstName || '')} ${capitalize(lastName || '')}`.trim();
+};
+
 function PostEditor() {
+
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+
   const [blogPost, setBlogPost] = useState({
     title: '',
     subTitle: '',
-    authors: [{ name: '', image: '' }],
+    authors: [{ name: formatName(user.firstName, user.lastName) || '', image: user.profilePicture || '' }],
     publishDate: new Date(),
     readTime: '',
     tags: [''],
@@ -40,6 +48,8 @@ function PostEditor() {
   const [isFirstBlock, setIsFirstBlock] = useState(true);
 
   const titleRef = useRef(null);
+
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -63,7 +73,13 @@ function PostEditor() {
     };
 
     loadDraft();
-  }, []);
+
+    // After loading the draft, update the first author with the connected user's details
+    // updateAuthor(0, 'name', formatName(user.firstName, user.lastName) || '');
+    // updateAuthor(0, 'image', user.profilePicture || '');
+
+  }, []); // Depend on 'user' to ensure this effect runs when the user's information changes
+
 
   useEffect(() => {
     const autoSaveInterval = setInterval(() => {
@@ -588,7 +604,7 @@ function PostEditor() {
         <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: '#416EEA', '&:hover': { backgroundColor: '#365FBE' } }} >
           Create Post
         </Button>
-    </Box>
+      </Box>
     </Container >
   );
 }
