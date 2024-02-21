@@ -236,4 +236,22 @@ export const fetchLikedPosts = async (token) => {
   }
 };
 
+export const fetchPostsByAuthorName = async (firstName, lastName, token) => {
+  try {
+    const response = await axiosInstance.get(`/api/posts/by-author`, {
+      params: {
+        firstName,
+        lastName
+      },
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+
 

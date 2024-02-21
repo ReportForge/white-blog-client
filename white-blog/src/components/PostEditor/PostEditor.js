@@ -178,12 +178,25 @@ function PostEditor() {
   };
 
   const updateAuthor = (index, field, value) => {
+    // Helper function to capitalize the first letter of every word
+    const capitalizeWords = (str) => {
+      return str.replace(/\b(\w)/g, s => s.toUpperCase()); // Capitalize the first letter of each word
+    };
+
     setBlogPost(prevState => {
       const updatedAuthors = [...prevState.authors];
-      updatedAuthors[index][field] = value;
+
+      // Check if the field being updated is 'name', and if so, apply the capitalizeWords function
+      if (field === 'name') {
+        updatedAuthors[index][field] = capitalizeWords(value);
+      } else {
+        updatedAuthors[index][field] = value;
+      }
+
       return { ...prevState, authors: updatedAuthors };
     });
   };
+
 
   const handleImageChange = (index, event) => {
     const file = event.target.files[0];

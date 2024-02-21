@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Container, Box, Typography, Grid, Avatar, IconButton, Paper, TextField, CircularProgress } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { updateUserProfile, fetchLikedPosts } from '../../api/api';
+import { updateUserProfile, fetchLikedPosts, fetchPostsByAuthorName } from '../../api/api';
 import MiniBlogPost from '../MiniBlogPost/MiniBlogPost'
 
 const Profile = () => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
     const [profilePicture, setProfilePicture] = useState(user.profilePicture);
     const [likedPosts, setLikedPosts] = useState([]);
+    const [userPosts, setUserPosts] = useState([]);
     const fileInputRef = useRef(null);
     const token = localStorage.getItem('token');
 
@@ -27,6 +28,22 @@ const Profile = () => {
 
         if (user._id) {
             getLikedPosts();
+        }
+    }, [token]);
+
+    // Fetch user's posts
+    useEffect(() => {
+        const getUserPosts = async () => {
+            try {
+                const posts = await fetchPostsByAuthorName(user.firstName, user.lastName,token);
+                setUserPosts(posts);
+            } catch (error) {
+                console.error('Failed to fetch user posts:', error);
+            }
+        };
+
+        if (user._id) {
+            getUserPosts();
         }
     }, [token]);
 
@@ -140,6 +157,8 @@ const Profile = () => {
             </Paper>
             <Typography variant="h5" mt='2rem' mb='2rem'>Liked Posts</Typography>
             <BlogPostsGrid posts={likedPosts} />
+            <Typography variant="h5" mt='2rem' mb='2rem'>Your Posts</Typography>
+            {userPosts==[] ? <BlogPostsGrid posts={userPosts} /> : <Typography variant="h7" mt='2rem' mb='2rem'>No Posts Yet</Typography>}
         </Container>
     );
 };
