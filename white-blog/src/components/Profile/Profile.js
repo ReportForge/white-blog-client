@@ -9,6 +9,8 @@ const Profile = () => {
     const [profilePicture, setProfilePicture] = useState(user.profilePicture);
     const [likedPosts, setLikedPosts] = useState([]);
     const [userPosts, setUserPosts] = useState([]);
+    const [likedPostsLoading, setLikedPostsLoading] = useState(true);
+    const [userPostsLoading, setUserPostsLoading] = useState(true);
     const fileInputRef = useRef(null);
     const token = localStorage.getItem('token');
 
@@ -24,6 +26,7 @@ const Profile = () => {
             } catch (error) {
                 console.error('Failed to fetch liked posts:', error);
             }
+            setLikedPostsLoading(false);
         };
 
         if (user._id) {
@@ -40,6 +43,7 @@ const Profile = () => {
             } catch (error) {
                 console.error('Failed to fetch user posts:', error);
             }
+            setUserPostsLoading(false);
         };
 
         if (user._id) {
@@ -68,12 +72,22 @@ const Profile = () => {
         fileInputRef.current.click();
     };
 
-    function BlogPostsGrid({ posts }) {
-        if (!posts.length) {
-            return <CircularProgress
-                size={60}
-                style={{ color: '#204EB7' }}
-            />;
+    function BlogPostsGrid({ posts, isLoading }) {
+        if (isLoading) {
+            return (
+                <CircularProgress
+                    size={60}
+                    style={{ color: '#204EB7', display: 'block', margin: 'auto', marginTop: 20 }}
+                />
+            );
+        }
+
+        if (posts.length === 0) {
+            return (
+                <Typography variant="subtitle1" style={{ marginTop: 20, textAlign: 'center' }}>
+                    No posts yet
+                </Typography>
+            );
         }
 
         return (
@@ -156,9 +170,9 @@ const Profile = () => {
                 </Grid>
             </Paper>
             <Typography variant="h5" mt='2rem' mb='2rem'>Liked Posts</Typography>
-            <BlogPostsGrid posts={likedPosts} />
+            <BlogPostsGrid posts={likedPosts} isLoading={likedPostsLoading}/>
             <Typography variant="h5" mt='2rem' mb='2rem'>Your Posts</Typography>
-            {userPosts.length > 0 ? <BlogPostsGrid posts={userPosts} /> : <Typography variant="h7" mt='2rem' mb='2rem'>No Posts Yet</Typography>}
+            <BlogPostsGrid posts={userPosts} isLoading={userPostsLoading}/>
         </Container>
     );
 };

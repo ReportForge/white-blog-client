@@ -17,17 +17,23 @@ function FullBlogPost() {
     const [editMode, setEditMode] = useState(false);
     const [editedFields, setEditedFields] = useState({});
     const [activeSection, setActiveSection] = useState(null);
+    const [isAuthor, setIsAuthor] = useState(false);
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isMobileOrMedium = useMediaQuery(theme.breakpoints.down('xl'));
     const navigate = useNavigate();
-
+    const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    const authorName = `${capitalizeFirstLetter(user.firstName)} ${capitalizeFirstLetter(user.lastName)}`;
+    console.log(authorName);
+    
     useEffect(() => {
         const getBlogPost = async () => {
             try {
                 const post = await fetchBlogPostById(id);
                 setBlogPost(post);
+                const Author = post.authors.some(author => author.name === authorName);
+                setIsAuthor(Author);
             } catch (error) {
                 console.error('Failed to fetch blog post:', error);
             }
@@ -116,7 +122,7 @@ function FullBlogPost() {
     const handleContentBlockImageUpload = (e, index) => {
         const file = e.target.files[0];
         const token = localStorage.getItem('token'); // Assuming you're storing the auth token in localStorage
-    
+
         if (file) {
             // Ideally, you should upload the file to your server or a cloud storage service to get a URL.
             // For demonstration, we'll use FileReader to simulate this process.
@@ -125,14 +131,14 @@ function FullBlogPost() {
                 // Simulated upload: In a real app, replace this with an actual upload function,
                 // and use the URL from the server/cloud storage instead of `e.target.result`.
                 const imageUrl = e.target.result; // This should be the URL from your upload function
-    
+
                 // Update the specific content block with the new image URL
                 const updatedBlocks = [...contentBlocks];
                 updatedBlocks[index].content = imageUrl;
-    
+
                 // Update the edited fields and the local state
                 setEditedFields({ ...editedFields, contentBlocks: updatedBlocks });
-    
+
                 // Optionally, you can save the blog post immediately after updating the image
                 // or you can let the user manually trigger the save for all changes at once
                 await updateBlogPost(id, { contentBlocks: updatedBlocks }, token);
@@ -140,11 +146,11 @@ function FullBlogPost() {
                 setEditedFields({ ...editedFields, contentBlocks: undefined }); // Clear edited state for the field
                 setEditMode(false);
             };
-    
+
             reader.readAsDataURL(file); // This is just for simulation; replace with actual upload logic
         }
     };
-    
+
 
     if (!blogPost) {
         return <Box
@@ -212,7 +218,14 @@ function FullBlogPost() {
         <>
 
             <Container maxWidth="lg"> {/* First part with maxWidth "lg" */}
-                <Box marginTop='2rem'>{user.isEditor && <IconButton sx={{ color: '#2c5ee8' }} onClick={handleEditToggle}><EditIcon /></IconButton>}</Box>
+                {isAuthor && <Box marginTop='2rem'>
+                    {user.isEditor &&
+                        <IconButton
+                            sx={{ color: '#2c5ee8' }}
+                            onClick={handleEditToggle}>
+                            <EditIcon />
+                        </IconButton>}
+                </Box>}
                 <Box sx={{ my: 4 }}>
                     {/* Title */}
                     {editMode ? (
@@ -729,7 +742,7 @@ function FullBlogPost() {
                         </Typography>
                     ))}
                 </Box>
-            ):(null)}
+            ) : (null)}
         </>
     );
 }

@@ -253,5 +253,15 @@ export const fetchPostsByAuthorName = async (firstName, lastName, token) => {
   }
 };
 
+// Function to handle Google login
+export const googleLogin = async (tokenId) => {
+  try {
+    const response = await axiosInstance.post('/api/auth/google-login', { tokenId });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 
 

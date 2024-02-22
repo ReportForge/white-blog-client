@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { loginUser } from '../../api/api';
+import { loginUser, googleLogin } from '../../api/api';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from '../../assets/images/logo.png';
 import { makeStyles } from '@mui/styles';
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from '@react-oauth/google';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,6 +73,28 @@ export default function SignIn() {
     }
   };
 
+  const responseMessage = async (response) => {
+    try {
+      // Extract the ID token from the Google login response
+      const tokenId = response.credential;
+
+      // Use the googleLogin function to send the token to your backend
+      const result = await googleLogin(tokenId);
+
+      // If the backend response is successful, store the token and user details
+      console.log('Google sign in successful:', result);
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result.user));
+      navigate('/'); // Redirect the user or update UI upon successful sign-in
+    } catch (error) {
+      // Handle errors, e.g., display a message to the user
+      console.error('Error during Google sign-in:', error);
+    }
+  };
+
+  const errorMessage = (error) => {
+    console.log(error);
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -129,7 +152,7 @@ export default function SignIn() {
               autoComplete="current-password"
               onChange={(e) => {
                 setPassword(e.target.value)
-                if(e.target.value.trim()) setPasswordError('');
+                if (e.target.value.trim()) setPasswordError('');
               }}
               InputLabelProps={{
                 style: { fontFamily: "'Lato', sans-serif" },
@@ -161,6 +184,12 @@ export default function SignIn() {
               </Grid>
             </Grid>
           </Box>
+        </Box>
+        <Box mt={2}>
+          <GoogleLogin
+            onSuccess={responseMessage}
+            onError={errorMessage}
+          />
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
