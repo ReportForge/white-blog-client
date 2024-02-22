@@ -105,14 +105,19 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
               {tags.map((tag) => (
                 <Button key={tag} className={classes.tagButton} sx={{
                   borderRadius: '20px',
-                  fontSize: '11px',
+                  fontSize: '13px',
                   marginLeft: '10px',
+                  boxShadow: 'none',
+                  textTransform: 'none',
                   fontFamily: "'Lato', sans-serif",
+                  border: '1px solid #cccccc',
                   marginTop: isMobile ? theme.spacing(1) : theme.spacing(0.5),
                   backgroundColor: activeTag === tag ? '#204EB7' : '#f0f3f7',
                   color: activeTag === tag ? '#ffffff' : '#85909D',
                   '&:hover': {
                     backgroundColor: activeTag === tag ? '#204EB7' : '#f0f3f7',
+                    border: '1px solid',
+                    boxShadow: 'none',
                   },
                 }}
                   variant="contained"

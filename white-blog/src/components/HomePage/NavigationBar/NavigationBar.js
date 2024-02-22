@@ -62,14 +62,18 @@ const NavigationBar = () => {
             <Button
               variant="contained"
               href="/signin"
-              style={{ fontFamily: "'Lato', sans-serif" }}
               sx={{
+                textTransform: 'none',
+                fontSize: '16px',
                 height: "30px",
+                fontFamily: "'Lato', sans-serif",
                 borderRadius: '20px',
                 backgroundColor: '#2C5EE8',
+                boxShadow: 'none',
                 color: 'white',
                 '&:hover': {
                   backgroundColor: '#204eb7',
+                  boxShadow: 'none',
                 },
               }}
             >
@@ -95,9 +99,13 @@ const NavigationBar = () => {
                   height: theme.spacing(4),
                   borderRadius: theme.spacing(2),
                   backgroundColor: '#2C5EE8',
+                  fontSize: '13px',
+                  boxShadow: 'none',
+                  textTransform: 'none',
                   color: 'white',
                   '&:hover': {
                     backgroundColor: '#204eb7',
+                    boxShadow: 'none',
                   },
                 }}
               >
@@ -110,6 +118,9 @@ const NavigationBar = () => {
                   sx={{
                     fontFamily: "'Lato', sans-serif",
                     height: theme.spacing(4),
+                    textTransform: 'none',
+                    fontSize: '16px',
+                    boxShadow: 'none',
                     borderRadius: theme.spacing(2),
                     backgroundColor: '#FFA500', // Different color for emphasis
                     color: 'white',
@@ -119,6 +130,7 @@ const NavigationBar = () => {
                     },
                     '&:hover': {
                       backgroundColor: '#cc8400',
+                      boxShadow: 'none',
                     },
                   }}
                 >

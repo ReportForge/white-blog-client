@@ -697,15 +697,20 @@ function FullBlogPost() {
                                 mb: '1rem',
                                 fontSize: '0.875rem',
                                 fontFamily: "'Lato', sans-serif",
-                                color: '#7C899E',
-                                fontWeight: 505,
+                                color: '#85909D',
                                 display: 'flex',
                                 alignItems: 'center', // Ensures vertical center alignment
                                 justifyContent: 'center', // Ensures horizontal center alignment
                                 height: 'auto', // Adjusts height based on content
-                                paddingY: '0.25rem',
+                                paddingY: '0.4rem',
                                 backgroundColor: '#F1F5F9',
-                                mr: '0.5rem'
+                                border: '1px solid #cccccc',
+                                mr: '0.5rem',
+                                '&:hover': {
+                                    backgroundColor: '#f0f3f7',
+                                    border: '1px solid',
+                                    boxShadow: 'none',
+                                },
                             }} />
                     ))}
                 </Box>
