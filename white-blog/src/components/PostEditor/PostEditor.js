@@ -479,7 +479,7 @@ function PostEditor() {
             id="image-upload"
           />
           <label htmlFor="image-upload">
-            <Button variant="contained" component="span" sx={{ backgroundColor: '#416EEA', '&:hover': { backgroundColor: '#365FBE' } }}>
+            <Button variant="contained" component="span" sx={{ backgroundColor: '#416EEA', '&:hover': { backgroundColor: '#365FBE' }, borderRadius: '20px' }}>
               Upload
             </Button>
           </label>
@@ -520,7 +520,7 @@ function PostEditor() {
                   onChange={(event) => handleContentBlockImageChange(index, event)}
                 />
                 <label htmlFor={`content-block-image-${index}`}>
-                  <Button variant="contained" component="span">
+                  <Button variant="contained" component="span" sx={{ backgroundColor: '#416EEA', '&:hover': { backgroundColor: '#365FBE' }, borderRadius: '20px' }}>
                     Upload Image
                   </Button>
                 </label>
@@ -611,10 +611,10 @@ function PostEditor() {
           </Box>
         ))}
 
-        <Button type="button" variant="outlined" sx={{ mt: 3, mb: 2, mr: 2 }} onClick={saveDraft}>
+        <Button type="button" variant="outlined" sx={{ mt: 3, mb: 2, mr: 2, borderRadius: '20px' }} onClick={saveDraft}>
           Save for Now
         </Button>
-        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: '#416EEA', '&:hover': { backgroundColor: '#365FBE' } }} >
+        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: '#416EEA', '&:hover': { backgroundColor: '#365FBE' },borderRadius: '20px' }} >
           Create Post
         </Button>
       </Box>

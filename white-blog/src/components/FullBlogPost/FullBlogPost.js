@@ -23,24 +23,36 @@ function FullBlogPost() {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isMobileOrMedium = useMediaQuery(theme.breakpoints.down('xl'));
     const navigate = useNavigate();
-    const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-    const authorName = `${capitalizeFirstLetter(user.firstName)} ${capitalizeFirstLetter(user.lastName)}`;
-    console.log(authorName);
-    
+
+    // Function to capitalize the first letter of a string
+    const capitalizeFirstLetter = (string) => {
+        if (!string) return ''; // Return an empty string if the input is falsy
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    };
+
+    // Check if firstName and lastName are defined, and provide a default value if not
+    const firstName = user.firstName ? capitalizeFirstLetter(user.firstName) : '';
+    const lastName = user.lastName ? capitalizeFirstLetter(user.lastName) : '';
+
+    // Use the checked and possibly adjusted firstName and lastName for authorName
+    const authorName = `${firstName} ${lastName}`;
+
+
     useEffect(() => {
         const getBlogPost = async () => {
             try {
                 const post = await fetchBlogPostById(id);
                 setBlogPost(post);
-                const Author = post.authors.some(author => author.name === authorName);
-                setIsAuthor(Author);
+                // Check if any of the post's authors match the constructed authorName
+                const isAuthor = post.authors.some(author => author.name === authorName.trim());
+                setIsAuthor(isAuthor);
             } catch (error) {
                 console.error('Failed to fetch blog post:', error);
             }
         };
 
         getBlogPost();
-    }, [id]);
+    }, [id, authorName]);
 
     useEffect(() => {
         const handleScroll = () => {
