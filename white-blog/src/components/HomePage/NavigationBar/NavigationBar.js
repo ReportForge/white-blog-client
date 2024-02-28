@@ -99,7 +99,7 @@ const NavigationBar = () => {
                   height: theme.spacing(4),
                   borderRadius: theme.spacing(2),
                   backgroundColor: '#2C5EE8',
-                  fontSize: '13px',
+                  fontSize: '16px',
                   boxShadow: 'none',
                   textTransform: 'none',
                   color: 'white',
