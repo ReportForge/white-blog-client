@@ -15,7 +15,7 @@ const NavigationWarp = ({ children }) => {
         position: 'sticky',
         top: 0,
         zIndex: 1000,
-        backgroundColor: '#fff',
+        backgroundColor: 'transparent',
         width: '100%', // Ensures the navigation bar spans the full width
         borderRadius: '20px',
       }}>

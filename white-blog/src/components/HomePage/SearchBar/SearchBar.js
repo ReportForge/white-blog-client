@@ -93,6 +93,7 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
   };
 
 
+
   return (
     <div className={classes.root}>
       <AppBar position="static" color="inherit" elevation={0}>
@@ -103,6 +104,7 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
                 Tags
               </Typography>
               {tags.map((tag) => (
+
                 <Button key={tag} className={classes.tagButton} sx={{
                   borderRadius: '20px',
                   fontSize: '13px',
@@ -112,10 +114,10 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
                   fontFamily: "'Lato', sans-serif",
                   border: '1px solid #cccccc',
                   marginTop: isMobile ? theme.spacing(1) : theme.spacing(0.5),
-                  backgroundColor: activeTag === tag ? '#204EB7' : '#f0f3f7',
+                  backgroundColor: activeTag === tag
+                    ? theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8' : '#FFFFFF',
                   color: activeTag === tag ? '#ffffff' : '#85909D',
                   '&:hover': {
-                    backgroundColor: activeTag === tag ? '#204EB7' : '#f0f3f7',
                     border: '1px solid',
                     boxShadow: 'none',
                   },
@@ -136,10 +138,11 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
               '& .MuiInputBase-input::placeholder': {
                 fontFamily: "'Lato', sans-serif", // Apply Lato font here for placeholder
               },
+              backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
             }}
             InputProps={{
               style: {
-                backgroundColor: '#f0f3f7',
+                backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : '#FAFAFA',
                 paddingLeft: '15px',
                 borderRadius: '20px',
                 fontSize: '14px',
@@ -148,7 +151,7 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
               },
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton edge="end" size="medium" sx={{ backgroundColor: '#FFFFFF' }}>
+                  <IconButton edge="end" size="medium" >
                     <SearchIcon />
                   </IconButton>
                 </InputAdornment>

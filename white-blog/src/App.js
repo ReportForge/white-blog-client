@@ -1,30 +1,73 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import AppRouter from './AppRouter';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider, CssBaseline, Switch } from '@mui/material';
 import { jwtDecode } from 'jwt-decode';
+import { IconButton, useTheme, styled } from '@mui/material';
+import Brightness4Icon from '@mui/icons-material/Brightness4'; // Dark mode icon
+import Brightness7Icon from '@mui/icons-material/Brightness7'; // Light mode icon
 
-const theme = createTheme({
-  typography: {
-    fontFamily: "'Lato', sans-serif",
+const ModeToggleButton = styled(IconButton)(({ theme }) => ({
+  position: 'fixed',
+  left: theme.spacing(2),
+  bottom: theme.spacing(2),
+  backgroundColor: theme.palette.background.paper,
+  color: theme.palette.text.primary,
+  '&:hover': {
+    backgroundColor: theme.palette.background.default,
   },
-  components: {
-    // This will ensure all text fields also use the Lato font
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          fontFamily: "'Lato', sans-serif",
-        },
-      },
-    },
-  },
-});
+}));
+
 
 function App() {
+
+  const [darkMode, setDarkMode] = useState(() => {
+    // Load dark mode setting from localStorage or default to false
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode === 'true' ? true : false;
+  });
+
+  const handleToggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: darkMode ? 'dark' : 'light',
+        },
+        typography: {
+          fontFamily: "'Lato', sans-serif",
+        },
+        components: {
+          MuiTextField: {
+            styleOverrides: {
+              root: {
+                fontFamily: "'Lato', sans-serif",
+              },
+            },
+          },
+          MuiButton: { // Targeting the Button component
+            styleOverrides: {
+              root: { // Applying styles to the root of the Button component
+                backgroundColor: darkMode ? '#C38FFF' : '#2C5EE8', // Conditional backgroundColor based on theme mode
+                '&:hover': { // Defining hover state styles
+                  backgroundColor: darkMode ? '#B37FEB' : '#2153CC', // Slightly darker shade on hover
+                },
+              },
+            },
+          },
+        },
+      }),
+    [darkMode],
+  );
+
 
   useEffect(() => {
     let inactivityTimer;
     let expirationTimer;
+    localStorage.setItem('darkMode', darkMode.toString());
 
     const resetInactivityTimer = () => {
       clearTimeout(inactivityTimer);
@@ -69,15 +112,19 @@ function App() {
       // window.removeEventListener('mousemove', resetInactivityTimer);
       // window.removeEventListener('keydown', resetInactivityTimer);
     };
-  }, []);
+  }, [darkMode]);
 
 
   return (
-    <div className="App">
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline /> {/* This helps with consistent background and text colors */}
+      <div className="App">
+        <ModeToggleButton onClick={handleToggleDarkMode} aria-label="toggle dark mode">
+          {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+        </ModeToggleButton>
         <AppRouter />
-      </ThemeProvider>
-    </div>
+      </div>
+    </ThemeProvider>
   );
 }
 

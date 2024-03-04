@@ -97,102 +97,101 @@ export default function SignIn() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
 
-          <Typography variant="h6" className={classes.title}>
-            <img src={Logo} alt="Logo" className={classes.logo} />
-          </Typography>
+        <Typography variant="h6" className={classes.title}>
+          <img src={Logo} alt="Logo" className={classes.logo} />
+        </Typography>
 
-          <Typography component="h1" variant="h5" style={{ fontFamily: "'Lato', sans-serif" }}>
-            Sign in
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              error={!!emailError}
-              helperText={emailError}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (!e.target.value.trim()) setEmailError(''); // Clear email error when the field is empty
-              }}
-              InputLabelProps={{
-                style: { fontFamily: "'Lato', sans-serif" },
-              }}
-              InputProps={{
-                style: { fontFamily: "'Lato', sans-serif" },
-              }}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              error={!!passwordError}
-              helperText={passwordError}
-              autoComplete="current-password"
-              onChange={(e) => {
-                setPassword(e.target.value)
-                if (e.target.value.trim()) setPasswordError('');
-              }}
-              InputLabelProps={{
-                style: { fontFamily: "'Lato', sans-serif" },
-              }}
-              InputProps={{
-                style: { fontFamily: "'Lato', sans-serif" },
-              }}
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              style={{ fontFamily: "'Lato', sans-serif", backgroundColor: '#0254EC' }}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="/password-reset" variant="body2" style={{ fontFamily: "'Lato', sans-serif" }}>
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/signup" variant="body2" style={{ fontFamily: "'Lato', sans-serif" }}>
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-        <Box mt={2}>
-          <GoogleLogin
-            onSuccess={responseMessage}
-            onError={errorMessage}
+        <Typography component="h1" variant="h5" style={{ fontFamily: "'Lato', sans-serif" }}>
+          Sign in
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            error={!!emailError}
+            helperText={emailError}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (!e.target.value.trim()) setEmailError(''); // Clear email error when the field is empty
+            }}
+            InputLabelProps={{
+              style: { fontFamily: "'Lato', sans-serif" },
+            }}
+            InputProps={{
+              style: { fontFamily: "'Lato', sans-serif" },
+            }}
           />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            error={!!passwordError}
+            helperText={passwordError}
+            autoComplete="current-password"
+            onChange={(e) => {
+              setPassword(e.target.value)
+              if (e.target.value.trim()) setPasswordError('');
+            }}
+            InputLabelProps={{
+              style: { fontFamily: "'Lato', sans-serif" },
+            }}
+            InputProps={{
+              style: { fontFamily: "'Lato', sans-serif" },
+            }}
+          />
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            style={{ fontFamily: "'Lato', sans-serif", backgroundColor: '#0254EC' }}
+          >
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="/password-reset" variant="body2" style={{ fontFamily: "'Lato', sans-serif" }}>
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="/signup" variant="body2" style={{ fontFamily: "'Lato', sans-serif" }}>
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
+      </Box>
+      <Box mt={2}>
+        <GoogleLogin
+          onSuccess={responseMessage}
+          onError={errorMessage}
+        />
+      </Box>
+      <Copyright sx={{ mt: 8, mb: 4 }} />
+    </Container>
+
   );
 }

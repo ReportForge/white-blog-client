@@ -282,7 +282,7 @@ function FullBlogPost() {
                             style={{
                                 fontSize: !isMobile ? '4rem' : '2.7rem',
                                 fontWeight: 700,
-                                color: '#1E293B',
+                                color: theme.palette.mode === 'dark' ? '#FAFAFA' : '#1E293B',
                                 textAlign: isMobile ? 'left' : null,
                                 fontFamily: "'Lato', sans-serif"
                             }}>
@@ -303,7 +303,7 @@ function FullBlogPost() {
                                     style: {
                                         fontSize: !isMobile ? '1.5rem' : '1rem',
                                         fontWeight: 400,
-                                        color: '#475569',
+                                        color: theme.palette.mode === 'dark' ? '#E0E0E0' : '#475569',
                                         textAlign: isMobile ? 'left' : null,
                                         marginBottom: '2rem',
                                         fontFamily: "'Lato', sans-serif"
@@ -321,7 +321,7 @@ function FullBlogPost() {
                             style={{
                                 fontSize: !isMobile ? '1.5rem' : '1rem',
                                 fontWeight: 400,
-                                color: '#475569',
+                                color: theme.palette.mode === 'dark' ? '#BDBDBD' : '#475569',
                                 textAlign: isMobile ? 'left' : null,
                                 marginBottom: '2rem',
                                 fontFamily: "'Lato', sans-serif"
@@ -338,7 +338,7 @@ function FullBlogPost() {
                             </Box>
                         ))}
                         <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3, mb: 1 }}>
-                            <Typography variant="body2" color="#323949" sx={{ fontWeight: 600, fontSize: '15px', fontFamily: "'Lato', sans-serif", textAlign: isMobile ? 'left' : null }} >
+                            <Typography variant="body2" color={theme.palette.mode === 'dark' ? '#BDBDBD' : '#323949'} sx={{ fontWeight: 600, fontSize: '15px', fontFamily: "'Lato', sans-serif", textAlign: isMobile ? 'left' : null }} >
                                 {authors.map((author, index) => (
                                     <span key={index}>
                                         {author.name}{index < authors.length - 1 ? ', ' : ''}
@@ -349,7 +349,7 @@ function FullBlogPost() {
                                 {new Date(publishDate).toLocaleDateString()}
                             </Typography>
                         </Box>
-                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: !isMobile ? '1rem' : '0.8rem', fontWeight: 510, marginLeft: !isMobile ? '5rem' : '1rem', fontFamily: "'Lato', sans-serif", color: '#6F7683' }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: !isMobile ? '1rem' : '0.8rem', fontWeight: 510, marginLeft: !isMobile ? '5rem' : '1rem', fontFamily: "'Lato', sans-serif", color: theme.palette.mode === 'dark' ? '#BDBDBD' : '#6F7683' }}>
                             {readTime} minutes read
                         </Typography>
                     </Box>
@@ -413,7 +413,7 @@ function FullBlogPost() {
                                                 sx: {
                                                     fontSize: !isMobile ? '1.2rem' : '1rem',
                                                     fontWeight: 400,
-                                                    color: '#475569',
+                                                    color: theme.palette.mode === 'dark' ? '#BDBDBD' : '#475569',
                                                     marginBottom: '2rem',
                                                     fontFamily: "'Lato', sans-serif",
                                                 }
@@ -426,7 +426,7 @@ function FullBlogPost() {
                                 ) : <Typography sx={{
                                     fontSize: !isMobile ? '1.2rem' : '1rem',
                                     fontWeight: 400,
-                                    color: '#475569',
+                                    color: theme.palette.mode === 'dark' ? '#BDBDBD' : '#475569',
                                     textAlign: 'left',
                                     marginBottom: '2rem',
                                     fontFamily: "'Lato', sans-serif"
@@ -497,7 +497,7 @@ function FullBlogPost() {
                                                     marginBottom: '1rem',
                                                     textAlign: 'left',
                                                     fontFamily: "'Lato', sans-serif",
-                                                    color: '#374151'
+                                                    color: theme.palette.mode === 'dark' ? '#E0E0E0' : '#374151',
                                                 }
                                             }}
                                         />
@@ -515,7 +515,7 @@ function FullBlogPost() {
                                         marginBottom: '1rem',
                                         textAlign: 'left',
                                         fontFamily: "'Lato', sans-serif",
-                                        color: '#374151'
+                                        color: theme.palette.mode === 'dark' ? '#E0E0E0' : '#374151',
                                     }}
                                     key={block._id || index}
                                 >
@@ -545,7 +545,7 @@ function FullBlogPost() {
                                                     marginBottom: '1rem',
                                                     textAlign: 'left',
                                                     fontFamily: "'Lato', sans-serif",
-                                                    color: '#374151'
+                                                    color: theme.palette.mode === 'dark' ? '#EFEFEF' : '#374151',
                                                 }
                                             }}
                                         />
@@ -564,7 +564,7 @@ function FullBlogPost() {
                                         marginBottom: '1rem',
                                         textAlign: 'left',
                                         fontFamily: "'Lato', sans-serif",
-                                        color: '#374151'
+                                        color: theme.palette.mode === 'dark' ? '#EFEFEF' : '#374151',
                                     }}
                                 >
                                     {block.content}
@@ -581,7 +581,7 @@ function FullBlogPost() {
                                             content: '"•"', // Bullet point character
                                             display: 'inline-block',
                                             marginRight: '8px', // Space between bullet and text
-                                            color: '#2C5EE8', // Example: change bullet point color
+                                            color: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8', // Example: change bullet point color
                                             fontWeight: 'bold', // Example: make bullet point bold
                                             fontSize: '1.3rem', // // Bullet size, adjust as needed
                                             lineHeight: 'inherit', // Align bullet with text
@@ -604,7 +604,7 @@ function FullBlogPost() {
                                                 sx: {
                                                     fontSize: !isMobile ? '1.2rem' : '1rem',
                                                     fontWeight: 400,
-                                                    color: '#475569',
+                                                    color: theme.palette.mode === 'dark' ? '#E0E0E0' : '#475569', // Example: change bullet point color
                                                     textAlign: 'left',
                                                     fontFamily: "'Lato', sans-serif"
                                                 }
@@ -618,12 +618,13 @@ function FullBlogPost() {
                                     <Box key={block._id || index} sx={{
                                         display: 'flex',
                                         alignItems: 'flex-start',
-                                        marginBottom: '0.5rem',
+                                        marginBottom: '1rem',
                                         '&:before': {
                                             content: '"•"', // Bullet point character
                                             display: 'inline-block',
                                             marginRight: '8px', // Space between bullet and text
-                                            color: '#2C5EE8', // Example: change bullet point color
+                                            color: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8', // Example: change bullet point color
+                                            // Example: change bullet point color
                                             fontWeight: 'bold', // Example: make bullet point bold
                                             fontSize: '1.3rem', // // Bullet size, adjust as needed
                                             lineHeight: 'inherit', // Align bullet with text
@@ -632,9 +633,10 @@ function FullBlogPost() {
                                         <Typography sx={{
                                             fontSize: !isMobile ? '1.2rem' : '1rem',
                                             fontWeight: 400,
-                                            color: '#475569',
+                                            color: theme.palette.mode === 'dark' ? '#E0E0E0' : '#475569',
                                             textAlign: 'left',
-                                            fontFamily: "'Lato', sans-serif"
+                                            fontFamily: "'Lato', sans-serif",
+                                            mt: '0.2rem'
                                         }}>
                                             {block.content}
 
@@ -659,8 +661,8 @@ function FullBlogPost() {
                                             }}
                                             inputProps={{
                                                 sx: {
-                                                    backgroundColor: '#F3F5FD',
-                                                    color: '#3C6AEA',
+                                                    backgroundColor: theme.palette.mode === 'dark' ? '#1E1E1E' : '#F3F5FD',
+                                                    color: theme.palette.mode === 'dark' ? '#C38FFF' : '#3C6AEA',
                                                     padding: '16px',
                                                     borderRadius: '8px',
                                                     fontFamily: 'monospace',
@@ -679,8 +681,8 @@ function FullBlogPost() {
                                     <Box
                                         key={block._id || index}
                                         sx={{
-                                            backgroundColor: '#F3F5FD',
-                                            color: '#3C6AEA',
+                                            backgroundColor: theme.palette.mode === 'dark' ? '#1E1E1E' : '#F3F5FD',
+                                            color: theme.palette.mode === 'dark' ? '#C38FFF' : '#3C6AEA',
                                             padding: '16px',
                                             borderRadius: '8px',
                                             fontFamily: 'monospace',
@@ -718,7 +720,7 @@ function FullBlogPost() {
                                 sx={{ mr: 2 }}
                             />
                             <IconButton onClick={handleSaveTags}>
-                                            <SaveIcon />
+                                <SaveIcon />
                             </IconButton>
                         </>
                     ) : (
@@ -735,10 +737,10 @@ function FullBlogPost() {
                                     backgroundColor: '#F1F5F9',
                                     border: '1px solid #cccccc',
                                     mr: '0.5rem',
-                                    '&:hover': {
-                                        backgroundColor: '#f0f3f7',
-                                        border: '1px solid',
-                                        boxShadow: 'none',
+                                    '&:hover, &:focus': {
+                                        backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF !important' : '', // Using !important to override Material UI default styles
+                                        border: theme.palette.mode === 'dark' ? '1px solid #C38FFF !important' : '1px solid',
+                                        boxShadow: 'none !important',
                                     },
                                 }}
                             />
@@ -774,15 +776,16 @@ function FullBlogPost() {
                         <Typography
                             key={index}
                             sx={{
-                                '&:hover': { color: '#0f172a' },
-                                color: activeSection === title.id ? '#0f172a' : '#8D919A', // Change color if active
+                                '&:hover': { color: theme.palette.mode === 'dark' ? '#C38FFF !important' : '#0f172a', },
+                                color: activeSection === title.id ? (theme.palette.mode === 'dark' ? '#C38FFF !important' : '#0f172a') : '#8D919A', // Change color if active
                                 fontSize: '0.8rem',
                                 cursor: 'pointer',
                                 fontFamily: "'Lato', sans-serif",
                                 mb: 2,
                                 pl: '5px', // Add space for the blue line
-                                borderLeft: activeSection === title.id ? '3px solid blue' : 'none', // Add blue line if active
-                                ...(title.type === 'bigTitle' ? { fontWeight: 800 } : {})
+                                borderLeft: activeSection === title.id ? (theme.palette.mode === 'dark' ? '3px solid #EA80FC !important' : '3px solid blue'): 'none', // Add blue line if active
+                                ...(title.type === 'bigTitle' ? { fontWeight: 800 } : {}),
+                                ...(title.type === 'smallTitle' ? { marginLeft: '1rem' } : {})
                             }}
                             onClick={() => scrollToSection(title.id)}
                         >

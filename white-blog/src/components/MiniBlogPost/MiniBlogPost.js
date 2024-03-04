@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography, Avatar, Box, IconButton, Modal, Button } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Avatar, Box, IconButton, Modal, Button, useTheme } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -34,6 +34,7 @@ function MiniBlogPost({ post }) {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
+    const theme = useTheme();
 
     useEffect(() => {
         // Set liked to true if the current user's ID is in the post's likes array
@@ -99,7 +100,13 @@ function MiniBlogPost({ post }) {
                 </Box>
             </Modal>
 
-            <Card sx={{ maxWidth: 345, m: 2, boxShadow: "none" }} >
+            <Card
+                sx={{
+                    maxWidth: 345,
+                    m: 2,
+                    boxShadow: "none",
+
+                }}>
                 <Box sx={{ position: 'relative' }}> {/* Container for image and like button */}
                     <CardMedia
                         component="img"
@@ -141,7 +148,7 @@ function MiniBlogPost({ post }) {
                         sx={{
                             textAlign: 'left',
                             fontWeight: 600,
-                            color: '#1E293B',
+                            color: theme.palette.mode === 'dark' ? '#FAFAFA' : '#1E293B',
                             fontFamily: "'Lato', sans-serif",
                             cursor: 'pointer', // Change cursor to pointer on hover
                         }}
@@ -156,7 +163,7 @@ function MiniBlogPost({ post }) {
                             </Box>
                         ))}
                         <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3, mb: 1 }}>
-                            <Typography variant="body2" color="#323949" sx={{ fontWeight: 600, fontSize: '15px', fontFamily: "'Lato', sans-serif" }} >
+                            <Typography variant="body2" color={theme.palette.mode === 'dark' ? '#EFEFEF' : '#323949'} sx={{ fontWeight: 600, fontSize: '15px', fontFamily: "'Lato', sans-serif" }} >
                                 {authors.map((author, index) => (
                                     <span key={index}>
                                         {author.name}{index < authors.length - 1 ? ', ' : ''}

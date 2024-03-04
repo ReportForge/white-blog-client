@@ -68,7 +68,7 @@ const NavigationBar = () => {
                 height: "30px",
                 fontFamily: "'Lato', sans-serif",
                 borderRadius: '20px',
-                backgroundColor: '#2C5EE8',
+                backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8',
                 boxShadow: 'none',
                 color: 'white',
                 '&:hover': {
