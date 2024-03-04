@@ -16,6 +16,7 @@ function FullBlogPost() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [editedFields, setEditedFields] = useState({});
+    const [editedTags, setEditedTags] = useState("");
     const [activeSection, setActiveSection] = useState(null);
     const [isAuthor, setIsAuthor] = useState(false);
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -76,12 +77,30 @@ function FullBlogPost() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const handleChange = (field, value) => {
+        setEditedFields({ ...editedFields, [field]: value });
+    };
+
+    const handleTagChange = (value) => {
+        setEditedTags(value);
+    };
+
     const handleEditToggle = () => {
+        if (!editMode) {
+            // Join the existing tags into a string when entering edit mode
+            setEditedTags(tags.join(", "));
+        }
         setEditMode(!editMode);
     };
 
-    const handleChange = (field, value) => {
-        setEditedFields({ ...editedFields, [field]: value });
+    // Update the handleSave function to handle saving tags
+    const handleSaveTags = async () => {
+        const updatedTags = editedTags.split(",").map(tag => tag.trim()); // Split the string into an array of tags
+        // Call your API to save the updated tags
+        await updateBlogPost(id, { tags: updatedTags }, localStorage.getItem('token'));
+        // Update the local state
+        setBlogPost({ ...blogPost, tags: updatedTags });
+        setEditMode(false); // Exit edit mode
     };
 
     const handleSave = async (field) => {
@@ -683,36 +702,48 @@ function FullBlogPost() {
                 </Typography>
 
                 {/* Tags */}
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, alignItems: 'center', mb: '2rem' }}>
                     <Typography sx={{ color: '#949AA3', textAlign: 'left', fontFamily: "'Lato', sans-serif", mr: '1.1rem', fontWeight: 600 }}>
-                        Tags
+                        Tags:
                     </Typography>
-                    {tags.map((tag, index) => (
-                        <Chip
-                            key={index}
-                            label={'#' + tag}
-                            variant="outlined"
-                            onClick={() => handleTagClick(tag)}
-                            sx={{
-                                mb: '1rem',
-                                fontSize: '0.875rem',
-                                fontFamily: "'Lato', sans-serif",
-                                color: '#85909D',
-                                display: 'flex',
-                                alignItems: 'center', // Ensures vertical center alignment
-                                justifyContent: 'center', // Ensures horizontal center alignment
-                                height: 'auto', // Adjusts height based on content
-                                paddingY: '0.4rem',
-                                backgroundColor: '#F1F5F9',
-                                border: '1px solid #cccccc',
-                                mr: '0.5rem',
-                                '&:hover': {
-                                    backgroundColor: '#f0f3f7',
-                                    border: '1px solid',
-                                    boxShadow: 'none',
-                                },
-                            }} />
-                    ))}
+                    {editMode ? (
+                        <>
+                            <TextField
+                                variant="outlined"
+                                label="Edit Tags"
+                                value={editedTags}
+                                onChange={(e) => handleTagChange(e.target.value)}
+                                helperText="Separate tags with commas"
+                                fullWidth
+                                sx={{ mr: 2 }}
+                            />
+                            <IconButton onClick={handleSaveTags}>
+                                            <SaveIcon />
+                            </IconButton>
+                        </>
+                    ) : (
+                        tags.map((tag, index) => (
+                            <Chip
+                                key={index}
+                                label={'#' + tag}
+                                variant="outlined"
+                                onClick={() => handleTagClick(tag)}
+                                sx={{
+                                    fontSize: '0.875rem',
+                                    fontFamily: "'Lato', sans-serif",
+                                    color: '#85909D',
+                                    backgroundColor: '#F1F5F9',
+                                    border: '1px solid #cccccc',
+                                    mr: '0.5rem',
+                                    '&:hover': {
+                                        backgroundColor: '#f0f3f7',
+                                        border: '1px solid',
+                                        boxShadow: 'none',
+                                    },
+                                }}
+                            />
+                        ))
+                    )}
                 </Box>
             </Container>
 
