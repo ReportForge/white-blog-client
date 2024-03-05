@@ -450,9 +450,11 @@ function PostEditor() {
                 value={tag}
                 onChange={(e) => handleInputChange(e, index, 'tags')}
               />
-              {!isFirstTag ? <IconButton onClick={() => removeTag(index)}>
-                <RemoveCircleOutlineIcon />
-              </IconButton> : null}
+              {blogPost.tags.length > 1 && (
+                <IconButton onClick={() => removeTag(index)}>
+                  <RemoveCircleOutlineIcon />
+                </IconButton>
+              )}
               <IconButton onClick={addTag}>
                 <AddCircleOutlineIcon />
               </IconButton>
@@ -600,9 +602,11 @@ function PostEditor() {
             )}
 
 
-            {!isFirstBlock ? <IconButton onClick={() => removeContentBlock(index)}>
-              <RemoveCircleOutlineIcon />
-            </IconButton> : null}
+            {blogPost.contentBlocks.length > 1 && (
+              <IconButton onClick={() => removeContentBlock(index)}>
+                <RemoveCircleOutlineIcon />
+              </IconButton>
+            )}
             {index === blogPost.contentBlocks.length - 1 && (
               <IconButton onClick={addContentBlock}>
                 <AddCircleOutlineIcon />
@@ -614,7 +618,7 @@ function PostEditor() {
         <Button type="button" variant="outlined" sx={{ mt: 3, mb: 2, mr: 2, borderRadius: '20px' }} onClick={saveDraft}>
           Save for Now
         </Button>
-        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: '#416EEA', '&:hover': { backgroundColor: '#365FBE' },borderRadius: '20px' }} >
+        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: '#416EEA', '&:hover': { backgroundColor: '#365FBE' }, borderRadius: '20px' }} >
           Create Post
         </Button>
       </Box>

@@ -48,16 +48,6 @@ function App() {
               },
             },
           },
-          MuiButton: { // Targeting the Button component
-            styleOverrides: {
-              root: { // Applying styles to the root of the Button component
-                backgroundColor: darkMode ? '#C38FFF' : '#2C5EE8', // Conditional backgroundColor based on theme mode
-                '&:hover': { // Defining hover state styles
-                  backgroundColor: darkMode ? '#B37FEB' : '#2153CC', // Slightly darker shade on hover
-                },
-              },
-            },
-          },
         },
       }),
     [darkMode],

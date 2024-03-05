@@ -41,7 +41,7 @@ const HomePage = () => {
       <AppBar
         position="static"
         elevation={0}
-        style={{ backgroundColor: '#0F172A' }}
+        style={{ backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8', }}
         onMouseOver={() => setIsAppBarHovered(true)}
         onMouseOut={() => setIsAppBarHovered(false)}
       >
@@ -57,8 +57,17 @@ const HomePage = () => {
               cursor: 'pointer',
             }}
             color="inherit"
+            onClick={() => {
+              if (user) {
+                // Navigate to BlogPostRequest if the user is logged in
+                navigate('/blog-post-request'); // Update the path as needed based on your routing setup
+              } else {
+                // Handle the case where the user is not logged in
+                // For example, open a sign-in dialog or redirect to a sign-in page
+              }
+            }}
           >
-            Sign in to get newspaper
+            {user? 'Come be part of our community!':'Sign in to get newspaper'}
             <ArrowForwardIosIcon style={{
               fontSize: '1rem',
               marginLeft: '5px',
@@ -95,7 +104,7 @@ const HomePage = () => {
             position: 'fixed',
             bottom: theme.spacing(6),
             right: theme.spacing(4),
-            backgroundColor: '#2C5EE8'
+            backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8',
           }}
           onClick={handleCreatePost}
         >

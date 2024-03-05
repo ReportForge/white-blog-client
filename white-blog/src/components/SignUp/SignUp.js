@@ -4,6 +4,8 @@ import { makeStyles } from '@mui/styles';
 import Logo from '../../assets/images/logo.png';
 import { registerUser, verifyEmailCode } from '../../api/api'; // Make sure to implement verifyEmailCode in your API module
 import { useNavigate } from "react-router-dom";
+import { useTheme } from '@mui/material/styles';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,6 +33,7 @@ export default function SignUp() {
     const [passwordError, setPasswordError] = useState('');
     const classes = useStyles();
     const navigate = useNavigate();
+    const theme = useTheme();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -157,8 +160,15 @@ export default function SignUp() {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                        style={{ fontFamily: "'Lato', sans-serif", backgroundColor: '#0254EC' }}
+                        sx={{
+                            mt: 3,
+                            mb: 2,
+                            fontFamily: "'Lato', sans-serif",
+                            backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#0254EC',
+                            '&:hover': {
+                                backgroundColor: theme.palette.mode === 'dark' ? '#C37EEE' : '#204eb7',
+                            },
+                        }}
                     >
                         {isVerificationStage ? 'Verify' : 'Sign Up'}
                     </Button>

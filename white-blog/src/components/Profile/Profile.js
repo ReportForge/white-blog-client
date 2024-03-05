@@ -3,6 +3,8 @@ import { Container, Box, Typography, Grid, Avatar, IconButton, Paper, TextField,
 import EditIcon from '@mui/icons-material/Edit';
 import { updateUserProfile, fetchLikedPosts, fetchPostsByAuthorName } from '../../api/api';
 import MiniBlogPost from '../MiniBlogPost/MiniBlogPost'
+import { useTheme } from '@mui/material/styles';
+
 
 const Profile = () => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
@@ -13,6 +15,8 @@ const Profile = () => {
     const [userPostsLoading, setUserPostsLoading] = useState(true);
     const fileInputRef = useRef(null);
     const token = localStorage.getItem('token');
+    const theme = useTheme();
+
 
     useEffect(() => {
         setProfilePicture(user.profilePicture); // Update state when user's profile picture changes
@@ -124,16 +128,16 @@ const Profile = () => {
                                     position: 'absolute',
                                     bottom: 0,
                                     right: 30,
-                                    backgroundColor: 'white',
+                                    backgroundColor: theme.palette.mode === 'dark' ? '#1E1E1E' : 'white',
                                     boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', // Example shadow
                                     '&:hover': {
-                                        backgroundColor: '#F0F4F8',
+                                        backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#F0F4F8',
                                         boxShadow: '0px 6px 8px rgba(0, 0, 0, 0.15)' // Slightly larger shadow on hover for a nice effect
                                     }
                                 }}
                                 onClick={triggerFileInput}
                             >
-                                <EditIcon fontSize="small" sx={{ '&:hover': { color: '#32383E' } }} />
+                                <EditIcon fontSize="small" />
                             </IconButton>
 
                         </Box>
@@ -170,9 +174,9 @@ const Profile = () => {
                 </Grid>
             </Paper>
             <Typography variant="h5" mt='2rem' mb='2rem'>Liked Posts</Typography>
-            <BlogPostsGrid posts={likedPosts} isLoading={likedPostsLoading}/>
+            <BlogPostsGrid posts={likedPosts} isLoading={likedPostsLoading} />
             <Typography variant="h5" mt='2rem' mb='2rem'>Your Posts</Typography>
-            <BlogPostsGrid posts={userPosts} isLoading={userPostsLoading}/>
+            <BlogPostsGrid posts={userPosts} isLoading={userPostsLoading} />
         </Container>
     );
 };

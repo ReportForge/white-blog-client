@@ -264,4 +264,17 @@ export const googleLogin = async (tokenId) => {
 };
 
 
+// Function to send a blog post request
+export const sendBlogPostRequest = async (blogPostData, token) => {
+  try {
+    const response = await axiosInstance.post('/api/users/blog-post-request', blogPostData, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Include the auth token in the request headers
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 

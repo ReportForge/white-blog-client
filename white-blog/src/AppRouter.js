@@ -10,6 +10,7 @@ import FullBlogPost from './components/FullBlogPost/FullBlogPost';
 import Profile from './components/Profile/Profile';
 import PasswordResetSubmit from './components/PasswordResetSubmit/PasswordResetSubmit';
 import PasswordReset from './components/PasswordReset/PasswordReset';
+import BlogPostRequest from './components/BlogPostRequest/BlogPostRequest';
 
 function AppRouter() {
   return (
@@ -24,6 +25,7 @@ function AppRouter() {
         <Route path="/profile" element={<NavigationWarp><Profile /></NavigationWarp>}/>
         <Route path="/password-reset" element={<PasswordReset />} />
         <Route path="/password-reset/:token" element={<PasswordResetSubmit />} />
+        <Route path="/blog-post-request" element={<BlogPostRequest />} />
 
       </Routes>
     </BrowserRouter>

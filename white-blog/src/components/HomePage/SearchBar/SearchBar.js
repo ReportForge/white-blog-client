@@ -118,6 +118,7 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
                     ? theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8' : '#FFFFFF',
                   color: activeTag === tag ? '#ffffff' : '#85909D',
                   '&:hover': {
+                    backgroundColor: theme.palette.mode === 'dark' ? '#C37EEE' : '#204eb7',
                     border: '1px solid',
                     boxShadow: 'none',
                   },

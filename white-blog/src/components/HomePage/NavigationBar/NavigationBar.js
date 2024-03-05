@@ -68,11 +68,11 @@ const NavigationBar = () => {
                 height: "30px",
                 fontFamily: "'Lato', sans-serif",
                 borderRadius: '20px',
-                backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8',
                 boxShadow: 'none',
                 color: 'white',
+                backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8',
                 '&:hover': {
-                  backgroundColor: '#204eb7',
+                  backgroundColor: theme.palette.mode === 'dark' ? '#C37EEE' : '#204eb7',
                   boxShadow: 'none',
                 },
               }}
@@ -98,13 +98,13 @@ const NavigationBar = () => {
                   marginRight: '10px',
                   height: theme.spacing(4),
                   borderRadius: theme.spacing(2),
-                  backgroundColor: '#2C5EE8',
                   fontSize: '16px',
                   boxShadow: 'none',
                   textTransform: 'none',
                   color: 'white',
+                  backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8',
                   '&:hover': {
-                    backgroundColor: '#204eb7',
+                    backgroundColor: theme.palette.mode === 'dark' ? '#C37EEE' : '#204eb7',
                     boxShadow: 'none',
                   },
                 }}

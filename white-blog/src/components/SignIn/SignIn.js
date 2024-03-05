@@ -8,11 +8,13 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import Logo from '../../assets/images/logo.png';
 import { makeStyles } from '@mui/styles';
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from '@react-oauth/google';
+import { useTheme } from '@mui/material/styles';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +52,7 @@ export default function SignIn() {
   const [passwordError, setPasswordError] = useState('');
   const classes = useStyles();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -165,8 +168,15 @@ export default function SignIn() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            style={{ fontFamily: "'Lato', sans-serif", backgroundColor: '#0254EC' }}
+            sx={{ 
+              mt: 3, 
+              mb: 2,
+              fontFamily: "'Lato', sans-serif", 
+              backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#0254EC',
+              '&:hover': {
+                backgroundColor: theme.palette.mode === 'dark' ? '#C37EEE' : '#204eb7',
+              },
+            }}
           >
             Sign In
           </Button>
