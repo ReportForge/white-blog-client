@@ -25,6 +25,7 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchParams] = useSearchParams();
   const initialTag = searchParams.get('tag');
+  console.log(user);
 
   const handleCreatePost = () => {
     navigate("/post-editor");
@@ -58,16 +59,15 @@ const HomePage = () => {
             }}
             color="inherit"
             onClick={() => {
-              if (user) {
+              if (Object.keys(user).length !== 0) {
                 // Navigate to BlogPostRequest if the user is logged in
                 navigate('/blog-post-request'); // Update the path as needed based on your routing setup
               } else {
-                // Handle the case where the user is not logged in
-                // For example, open a sign-in dialog or redirect to a sign-in page
+                navigate('/signin');
               }
             }}
           >
-            {user? 'Come be part of our community!':'Sign in to get newspaper'}
+            {Object.keys(user).length !== 0 ? 'Come be part of our community!' : 'Sign in to get newspaper'}
             <ArrowForwardIosIcon style={{
               fontSize: '1rem',
               marginLeft: '5px',
