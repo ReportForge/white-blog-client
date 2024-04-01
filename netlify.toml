@@ -1,0 +1,18 @@
+# Redirect all non-handled requests to index.html, allowing React Router to handle routing
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+# Specific redirect for password reset requests, assuming you want to handle these outside of your React app
+[[redirects]]
+from = "/password-reset/*"
+to = "https://monumental-florentine-67199f.netlify.app/password-reset/:splat"
+status = 301
+
+# Redirect any other specific paths as needed
+# Example: Redirecting "/old-blog" to the new blog post request page
+[[redirects]]
+from = "/old-blog"
+to = "/blog-post-request"
+status = 301

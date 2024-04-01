@@ -2,6 +2,7 @@ import axios from 'axios';
 
 // Set up the base URL for all API calls
 const API_BASE_URL = 'http://localhost:3000'; // Adjust this to your server's address and port
+//const API_BASE_URL = 'https://whiteblog-ffb7cfa6fd24.herokuapp.com'; // Adjust this to your server's address and port
 
 // Axios instance to set common configurations
 const axiosInstance = axios.create({

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { TextField, Button, Typography, Container, Box } from '@mui/material';
 import { sendBlogPostRequest } from '../../api/api'; // Adjust the import path as necessary
 import Logo from '../../assets/images/logo.png';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function BlogPostRequest() {
     const [subject, setSubject] = useState('');
@@ -16,12 +18,12 @@ function BlogPostRequest() {
 
         try {
             await sendBlogPostRequest({ subject, description, userEmail }, token);
-            alert('Your request has been sent!');
+            toast.success('Your request has been sent!');
             setSubject('');
             setDescription('');
         } catch (error) {
             console.error('Failed to send blog post request:', error);
-            alert('Failed to send your request. Please try again.');
+            toast.error('Failed to send your request. Please try again.');
         }
     };
 
@@ -32,6 +34,7 @@ function BlogPostRequest() {
             justifyContent: 'center', // Center vertically
             height: '100vh', // Take full viewport height
         }}>
+            <ToastContainer />
             <Box
                 sx={{
                     marginTop: 8,
