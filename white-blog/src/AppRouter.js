@@ -11,6 +11,8 @@ import Profile from './components/Profile/Profile';
 import PasswordResetSubmit from './components/PasswordResetSubmit/PasswordResetSubmit';
 import PasswordReset from './components/PasswordReset/PasswordReset';
 import BlogPostRequest from './components/BlogPostRequest/BlogPostRequest';
+import TwitterCallback from './components/TwitterCallback/TwitterCallback';
+
 
 function AppRouter() {
   return (
@@ -26,7 +28,7 @@ function AppRouter() {
         <Route path="/password-reset" element={<PasswordReset />} />
         <Route path="/password-reset/:token" element={<PasswordResetSubmit />} />
         <Route path="/blog-post-request" element={<BlogPostRequest />} />
-
+        <Route path="/twitter-callback" element={<TwitterCallback />} />
       </Routes>
     </BrowserRouter>
   );

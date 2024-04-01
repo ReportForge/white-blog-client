@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { loginUser, googleLogin } from '../../api/api';
+import { loginUser, googleLogin, twitterLogin } from '../../api/api';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -8,7 +8,6 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme } from '@mui/material/styles';
 import Logo from '../../assets/images/logo.png';
 import { makeStyles } from '@mui/styles';
 import { useNavigate } from "react-router-dom";
@@ -43,7 +42,6 @@ function Copyright(props) {
   );
 }
 
-const defaultTheme = createTheme();
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -75,6 +73,12 @@ export default function SignIn() {
       }
     }
   };
+
+
+  const handleTwitterLogin = () => {
+    window.location.href = `https://whiteblog-ffb7cfa6fd24.herokuapp.com/api/auth/twitter`; // This should be your backend endpoint that initiates the Twitter OAuth flow
+  }
+
 
   const responseMessage = async (response) => {
     try {
@@ -168,10 +172,10 @@ export default function SignIn() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ 
-              mt: 3, 
+            sx={{
+              mt: 3,
               mb: 2,
-              fontFamily: "'Lato', sans-serif", 
+              fontFamily: "'Lato', sans-serif",
               backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#0254EC',
               '&:hover': {
                 backgroundColor: theme.palette.mode === 'dark' ? '#C37EEE' : '#204eb7',
@@ -199,6 +203,24 @@ export default function SignIn() {
           onSuccess={responseMessage}
           onError={errorMessage}
         />
+      </Box>
+      <Box mt={2}>
+        <Button
+          onClick={handleTwitterLogin} // Set the onClick handler to the handleTwitterLogin function
+          fullWidth
+          variant="contained"
+          sx={{
+            mt: 3,
+            mb: 2,
+            fontFamily: "'Lato', sans-serif",
+            backgroundColor: theme.palette.mode === 'dark' ? '#1DA1F2' : '#1DA1F2', // Twitter blue color
+            '&:hover': {
+              backgroundColor: theme.palette.mode === 'dark' ? '#1991DA' : '#1888D4',
+            },
+          }}
+        >
+          Sign in with Twitter
+        </Button>
       </Box>
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>

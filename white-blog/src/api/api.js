@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // Set up the base URL for all API calls
-const API_BASE_URL = 'http://localhost:3000'; // Adjust this to your server's address and port
-//const API_BASE_URL = 'https://whiteblog-ffb7cfa6fd24.herokuapp.com'; // Adjust this to your server's address and port
+//const API_BASE_URL = 'http://localhost:3000'; // Adjust this to your server's address and port
+const API_BASE_URL = 'https://whiteblog-ffb7cfa6fd24.herokuapp.com'; // Adjust this to your server's address and port
 
 // Axios instance to set common configurations
 const axiosInstance = axios.create({
@@ -273,6 +273,16 @@ export const sendBlogPostRequest = async (blogPostData, token) => {
         'Authorization': `Bearer ${token}`, // Include the auth token in the request headers
       },
     });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+// Function to initiate Twitter login
+export const twitterLogin = async () => {
+  try {
+    const response = await axiosInstance.get('/api/auth/twitter');
     return response.data;
   } catch (error) {
     throw error.response.data;
