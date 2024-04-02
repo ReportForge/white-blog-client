@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { loginUser, googleLogin, twitterLogin } from '../../api/api';
+import {loginUser, googleLogin} from '../../api/api';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -13,6 +13,7 @@ import { makeStyles } from '@mui/styles';
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from '@react-oauth/google';
 import { useTheme } from '@mui/material/styles';
+import TwitterIcon from '@mui/icons-material/Twitter';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -75,7 +76,7 @@ export default function SignIn() {
   };
 
 
-  const handleTwitterLogin = () => {
+  const handleXLogin = () => {
     window.location.href = `https://whiteblog-ffb7cfa6fd24.herokuapp.com/api/auth/twitter`; // This should be your backend endpoint that initiates the Twitter OAuth flow
   }
 
@@ -206,20 +207,21 @@ export default function SignIn() {
       </Box>
       <Box mt={2}>
         <Button
-          onClick={handleTwitterLogin} // Set the onClick handler to the handleTwitterLogin function
+          onClick={handleXLogin} // Adjust the handler function name if needed
           fullWidth
           variant="contained"
+          endIcon={<TwitterIcon />} // Adding the X icon to the button
           sx={{
             mt: 3,
             mb: 2,
             fontFamily: "'Lato', sans-serif",
-            backgroundColor: theme.palette.mode === 'dark' ? '#1DA1F2' : '#1DA1F2', // Twitter blue color
+            backgroundColor: theme.palette.mode === 'dark' ? '#1DA1F2' : '#1DA1F2', // Adjust the color to match X's branding
             '&:hover': {
-              backgroundColor: theme.palette.mode === 'dark' ? '#1991DA' : '#1888D4',
+              backgroundColor: theme.palette.mode === 'dark' ? '#1991DA' : '#1888D4', // Adjust the hover color to match X's branding
             },
           }}
         >
-          Sign in with Twitter
+          Sign in with
         </Button>
       </Box>
       <Copyright sx={{ mt: 8, mb: 4 }} />

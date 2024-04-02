@@ -279,13 +279,4 @@ export const sendBlogPostRequest = async (blogPostData, token) => {
   }
 };
 
-// Function to initiate Twitter login
-export const twitterLogin = async () => {
-  try {
-    const response = await axiosInstance.get('/api/auth/twitter');
-    return response.data;
-  } catch (error) {
-    throw error.response.data;
-  }
-};
 
