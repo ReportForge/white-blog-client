@@ -352,11 +352,14 @@ function FullBlogPost() {
                             {readTime} minutes read
                         </Typography>
                     </Box>
+
+                    {/* Post Buttons */}
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 5, ml: '2rem' }}>
                         <a className="twitter-share-button"
-                            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(window.location.href)}`}>
+                            href={`https://twitter.com/intent/tweet?text=Check out White Hat's new post about: ${encodeURIComponent(title)} - &url=${encodeURIComponent(window.location.href)}`}>
                             Tweet</a>
                     </Box>
+
                     {/* mainImage */}
                     {editMode ? (
                         <>
@@ -707,11 +710,8 @@ function FullBlogPost() {
                     })}
                 </Typography>
 
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 5 }}>
-                    <a className="twitter-share-button"
-                        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(window.location.href)}`}>
-                        Tweet</a>
-                </Box>
+
+
                 {/* Tags */}
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, alignItems: 'center', mb: '2rem' }}>
                     <Typography sx={{ color: '#949AA3', textAlign: 'left', fontFamily: "'Lato', sans-serif", mr: '1.1rem', fontWeight: 600 }}>
