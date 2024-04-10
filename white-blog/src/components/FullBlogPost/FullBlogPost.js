@@ -247,7 +247,6 @@ function FullBlogPost() {
 
     return (
         <>
-
             <Container maxWidth="lg"> {/* First part with maxWidth "lg" */}
                 {isAuthor && <Box marginTop='2rem'>
                     {user.isEditor &&
@@ -352,6 +351,11 @@ function FullBlogPost() {
                         <Typography variant="body2" color="text.secondary" sx={{ fontSize: !isMobile ? '1rem' : '0.8rem', fontWeight: 510, marginLeft: !isMobile ? '5rem' : '1rem', fontFamily: "'Lato', sans-serif", color: theme.palette.mode === 'dark' ? '#BDBDBD' : '#6F7683' }}>
                             {readTime} minutes read
                         </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 5, ml: '2rem' }}>
+                        <a className="twitter-share-button"
+                            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(window.location.href)}`}>
+                            Tweet</a>
                     </Box>
                     {/* mainImage */}
                     {editMode ? (
@@ -703,6 +707,11 @@ function FullBlogPost() {
                     })}
                 </Typography>
 
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 5 }}>
+                    <a className="twitter-share-button"
+                        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(window.location.href)}`}>
+                        Tweet</a>
+                </Box>
                 {/* Tags */}
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, alignItems: 'center', mb: '2rem' }}>
                     <Typography sx={{ color: '#949AA3', textAlign: 'left', fontFamily: "'Lato', sans-serif", mr: '1.1rem', fontWeight: 600 }}>
@@ -783,7 +792,7 @@ function FullBlogPost() {
                                 fontFamily: "'Lato', sans-serif",
                                 mb: 2,
                                 pl: '5px', // Add space for the blue line
-                                borderLeft: activeSection === title.id ? (theme.palette.mode === 'dark' ? '3px solid #EA80FC !important' : '3px solid blue'): 'none', // Add blue line if active
+                                borderLeft: activeSection === title.id ? (theme.palette.mode === 'dark' ? '3px solid #EA80FC !important' : '3px solid blue') : 'none', // Add blue line if active
                                 ...(title.type === 'bigTitle' ? { fontWeight: 800 } : {}),
                                 ...(title.type === 'smallTitle' ? { marginLeft: '1rem' } : {})
                             }}
