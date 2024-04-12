@@ -7,6 +7,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import { Helmet } from 'react-helmet';
 
 function FullBlogPost() {
     const { id } = useParams();
@@ -247,6 +249,11 @@ function FullBlogPost() {
 
     return (
         <>
+            <Helmet>
+                <meta name="og:image" content={blogPost?.mainImage} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:image" content={blogPost?.mainImage} />
+            </Helmet>
             <Container maxWidth="lg"> {/* First part with maxWidth "lg" */}
                 {isAuthor && <Box marginTop='2rem'>
                     {user.isEditor &&
@@ -355,10 +362,15 @@ function FullBlogPost() {
 
                     {/* Post Buttons */}
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 5, ml: '2rem' }}>
-                        <a className="twitter-share-button"
-                            href={`https://twitter.com/intent/tweet?text=Check out White Hat's new post about: ${encodeURIComponent(title)} - &url=${encodeURIComponent(window.location.href)}`}>
-                            Tweet</a>
+                        <Button
+                            variant="contained"
+                            startIcon={<TwitterIcon />} // Replace CloseIcon with your preferred X-like icon
+                            onClick={() => window.open(`https://twitter.com/intent/tweet?text=Check out White Hat's new post about: ${encodeURIComponent(title)} - &url=${encodeURIComponent(window.location.href)}`, '_blank')}
+                        >
+                            Share
+                        </Button>
                     </Box>
+
 
                     {/* mainImage */}
                     {editMode ? (
