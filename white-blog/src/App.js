@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import AppRouter from './AppRouter';
-import { createTheme, ThemeProvider, CssBaseline, Switch } from '@mui/material';
+import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import { jwtDecode } from 'jwt-decode';
-import { IconButton, useTheme, styled } from '@mui/material';
+import { IconButton, styled } from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4'; // Dark mode icon
 import Brightness7Icon from '@mui/icons-material/Brightness7'; // Light mode icon
 

@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import { Helmet } from 'react-helmet';
+import SEO from '../../components/SEO/SEO';
 
 function FullBlogPost() {
     const { id } = useParams();
@@ -249,11 +249,12 @@ function FullBlogPost() {
 
     return (
         <>
-            <Helmet>
-                <meta name="og:image" content={blogPost?.mainImage} />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:image" content={blogPost?.mainImage} />
-            </Helmet>
+            <SEO 
+                title={blogPost.title} 
+                description={blogPost.subTitle || 'Default description'}
+                name={`@${blogPost.authors[0].name}`} // assuming this is part of your blogPost object
+                type="summary_large_image" // or "summary" depending on your preference
+            />
             <Container maxWidth="lg"> {/* First part with maxWidth "lg" */}
                 {isAuthor && <Box marginTop='2rem'>
                     {user.isEditor &&
