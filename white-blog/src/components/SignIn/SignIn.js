@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {loginUser, googleLogin} from '../../api/api';
+import { loginUser, googleLogin } from '../../api/api';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -14,7 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from '@react-oauth/google';
 import { useTheme } from '@mui/material/styles';
 import TwitterIcon from '@mui/icons-material/Twitter';
-
+import { LoginSocialFacebook } from 'reactjs-social-login';
+import { FacebookLoginButton } from 'react-social-login-buttons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -224,6 +225,17 @@ export default function SignIn() {
           Sign in with
         </Button>
       </Box>
+      <LoginSocialFacebook
+        appId="982174136904133"
+        onResolve={(resonse) => {
+          console.log(resonse);
+        }}
+        onReject={(error) => {
+          console.log(error);
+        }}
+      >
+        <FacebookLoginButton />
+      </LoginSocialFacebook>
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
 
