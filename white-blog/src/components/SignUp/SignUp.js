@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, createTheme, ThemeProvider } from '@mui/material';
+import { Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Logo from '../../assets/images/logo.png';
 import { registerUser, verifyEmailCode } from '../../api/api'; // Make sure to implement verifyEmailCode in your API module
@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const defaultTheme = createTheme();
 
 export default function SignUp() {
     const [firstName, setFirstName] = useState('');

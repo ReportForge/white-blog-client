@@ -43,9 +43,7 @@ function PostEditor() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [isTitleInvalid, setIsTitleInvalid] = useState(false);
-  const [isFirstTag, setIsFirstTag] = useState(true);
   const [isFirstAuthor, setIsFirstAuthor] = useState(true);
-  const [isFirstBlock, setIsFirstBlock] = useState(true);
 
   const titleRef = useRef(null);
 
@@ -228,7 +226,6 @@ function PostEditor() {
     const newBlogPost = { ...blogPost };
     newBlogPost.tags.push('');
     setBlogPost(newBlogPost);
-    setIsFirstTag(false);
   };
 
   const removeTag = (index) => {
@@ -241,7 +238,6 @@ function PostEditor() {
     const newBlogPost = { ...blogPost };
     newBlogPost.contentBlocks.push({ type: 'text', content: '' });
     setBlogPost(newBlogPost);
-    setIsFirstBlock(false);
   };
 
   const removeContentBlock = (index) => {
