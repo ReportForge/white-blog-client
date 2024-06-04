@@ -70,7 +70,7 @@ const NavigationBar = () => {
                 borderRadius: '20px',
                 boxShadow: 'none',
                 color: 'white',
-                backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8',
+                backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#0043ff',
                 '&:hover': {
                   backgroundColor: theme.palette.mode === 'dark' ? '#C37EEE' : '#204eb7',
                   boxShadow: 'none',
@@ -102,7 +102,7 @@ const NavigationBar = () => {
                   boxShadow: 'none',
                   textTransform: 'none',
                   color: 'white',
-                  backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8',
+                  backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#0043ff',
                   '&:hover': {
                     backgroundColor: theme.palette.mode === 'dark' ? '#C37EEE' : '#204eb7',
                     boxShadow: 'none',

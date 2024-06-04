@@ -92,7 +92,7 @@ function MiniBlogPost({ post }) {
                         onClick={redirectToSignIn}
                         style={{
                             fontFamily: "'Lato', sans-serif",
-                            backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8',
+                            backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#0043ff',
                             borderRadius: '20px'
                         }}>
                         Sign In

@@ -531,7 +531,7 @@ function PostEditor() {
                     display: 'inline-block',
                     marginRight: '8px', // Adjust spacing between the bullet and the text
                     marginTop: '20px', // Adjust to align with the TextField, might need further adjustment
-                    color: '#2C5EE8', // Example: change bullet point color
+                    color: '#0043ff', // Example: change bullet point color
                     fontWeight: 'bold', // Example: make bullet point bold
                     fontSize: '1.5rem', //
                   }
@@ -575,7 +575,7 @@ function PostEditor() {
                     style: {
                       fontWeight: 400,
                       fontSize: '1rem',
-                      color: '#2C5EE8'
+                      color: '#0043ff'
                     },
                   }}
                 />

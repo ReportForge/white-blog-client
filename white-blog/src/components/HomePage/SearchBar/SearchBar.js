@@ -115,7 +115,7 @@ const SearchBar = ({ setSelectedTag, setSearchTerm }) => {
                   border: '1px solid #cccccc',
                   marginTop: isMobile ? theme.spacing(1) : theme.spacing(0.5),
                   backgroundColor: activeTag === tag
-                    ? theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8' : '#FFFFFF',
+                    ? theme.palette.mode === 'dark' ? '#C38FFF' : '#0043ff' : '#FFFFFF',
                   color: activeTag === tag ? '#ffffff' : '#85909D',
                   '&:hover': {
                     backgroundColor: theme.palette.mode === 'dark' ? '#C37EEE' : '#204eb7',

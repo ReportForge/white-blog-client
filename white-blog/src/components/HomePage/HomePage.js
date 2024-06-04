@@ -42,7 +42,7 @@ const HomePage = () => {
       <AppBar
         position="static"
         elevation={0}
-        style={{ backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8', }}
+        style={{ backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#0043ff', }}
         onMouseOver={() => setIsAppBarHovered(true)}
         onMouseOut={() => setIsAppBarHovered(false)}
       >
@@ -104,7 +104,7 @@ const HomePage = () => {
             position: 'fixed',
             bottom: theme.spacing(6),
             right: theme.spacing(4),
-            backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8',
+            backgroundColor: theme.palette.mode === 'dark' ? '#C38FFF' : '#0043ff',
           }}
           onClick={handleCreatePost}
         >

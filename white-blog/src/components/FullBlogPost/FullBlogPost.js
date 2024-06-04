@@ -259,7 +259,7 @@ function FullBlogPost() {
                 {isAuthor && <Box marginTop='2rem'>
                     {user.isEditor &&
                         <IconButton
-                            sx={{ color: '#2c5ee8' }}
+                            sx={{ color: '#0043ff' }}
                             onClick={handleEditToggle}>
                             <EditIcon />
                         </IconButton>}
@@ -601,7 +601,7 @@ function FullBlogPost() {
                                             content: '"•"', // Bullet point character
                                             display: 'inline-block',
                                             marginRight: '8px', // Space between bullet and text
-                                            color: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8', // Example: change bullet point color
+                                            color: theme.palette.mode === 'dark' ? '#C38FFF' : '#0043ff', // Example: change bullet point color
                                             fontWeight: 'bold', // Example: make bullet point bold
                                             fontSize: '1.3rem', // // Bullet size, adjust as needed
                                             lineHeight: 'inherit', // Align bullet with text
@@ -643,7 +643,7 @@ function FullBlogPost() {
                                             content: '"•"', // Bullet point character
                                             display: 'inline-block',
                                             marginRight: '8px', // Space between bullet and text
-                                            color: theme.palette.mode === 'dark' ? '#C38FFF' : '#2C5EE8', // Example: change bullet point color
+                                            color: theme.palette.mode === 'dark' ? '#C38FFF' : '#0043ff', // Example: change bullet point color
                                             // Example: change bullet point color
                                             fontWeight: 'bold', // Example: make bullet point bold
                                             fontSize: '1.3rem', // // Bullet size, adjust as needed

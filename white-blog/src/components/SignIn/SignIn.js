@@ -54,6 +54,25 @@ export default function SignIn() {
   const navigate = useNavigate();
   const theme = useTheme();
 
+
+  // Function to handle Facebook login response
+  // const handleFacebookLogin = async (response) => {
+  //   try {
+  //     const userData = {
+  //       firstName: response.data.first_name,
+  //       lastName: response.data.last_name,
+  //       email: response.data.email,
+  //       password: response.data.password
+  //     };
+  //     const result = await registerUser(userData);
+  //     localStorage.setItem('token', result.token);
+  //     localStorage.setItem('user', JSON.stringify(result.user));
+  //   } catch (error) {
+  //     console.error('Error during Facebook sign-in:', error);
+  //     // Handle errors, e.g., display a message to the user
+  //   }
+  // };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -225,17 +244,17 @@ export default function SignIn() {
           Sign in with
         </Button>
       </Box>
-      <LoginSocialFacebook
+      {/* <LoginSocialFacebook
         appId="982174136904133"
         onResolve={(resonse) => {
-          console.log(resonse);
+          handleFacebookLogin(resonse);
         }}
         onReject={(error) => {
           console.log(error);
         }}
       >
         <FacebookLoginButton />
-      </LoginSocialFacebook>
+      </LoginSocialFacebook> */}
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
 
